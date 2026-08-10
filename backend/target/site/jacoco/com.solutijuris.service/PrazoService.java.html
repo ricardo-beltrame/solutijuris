@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="pt"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PrazoService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">SolutiJuris</a> &gt; <a href="index.source.html" class="el_package">com.solutijuris.service</a> &gt; <span class="el_source">PrazoService.java</span></div><h1>PrazoService.java</h1><pre class="source lang-java linenums">package com.solutijuris.service;
+
+import com.solutijuris.model.entity.LogAuditoria;
+import com.solutijuris.model.entity.Prazo;
+import com.solutijuris.model.entity.Processo;
+import com.solutijuris.model.entity.Usuario;
+import com.solutijuris.model.enums.StatusPrazo;
+import com.solutijuris.repository.LogAuditoriaRepository;
+import com.solutijuris.repository.PrazoRepository;
+import com.solutijuris.repository.ProcessoRepository;
+import com.solutijuris.repository.UsuarioRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDate;
+import java.util.List;
+import java.util.UUID;
+
+@Service
+@RequiredArgsConstructor
+public class PrazoService {
+
+    private final PrazoRepository prazoRepository;
+    private final ProcessoRepository processoRepository;
+    private final UsuarioRepository usuarioRepository;
+    private final LogAuditoriaRepository logAuditoriaRepository;
+
+    @Transactional
+    public Prazo cadastrar(UUID processoId, UUID responsavelId,
+                           LocalDate dataVencimento, String descricao,
+                           String emailUsuario) {
+<span class="nc" id="L33">        Processo processo = processoRepository.findById(processoId)</span>
+<span class="nc" id="L34">                .orElseThrow(() -&gt; new RuntimeException(&quot;Processo não encontrado&quot;));</span>
+
+<span class="nc" id="L36">        Usuario responsavel = usuarioRepository.findById(responsavelId)</span>
+<span class="nc" id="L37">                .orElseThrow(() -&gt; new RuntimeException(&quot;Responsável não encontrado&quot;));</span>
+
+<span class="nc" id="L39">        var prazo = new Prazo();</span>
+<span class="nc" id="L40">        prazo.setProcesso(processo);</span>
+<span class="nc" id="L41">        prazo.setResponsavel(responsavel);</span>
+<span class="nc" id="L42">        prazo.setDataVencimento(dataVencimento);</span>
+<span class="nc" id="L43">        prazo.setDescricao(descricao);</span>
+<span class="nc" id="L44">        prazo.setStatus(StatusPrazo.ABERTO);</span>
+
+<span class="nc" id="L46">        prazoRepository.save(prazo);</span>
+
+<span class="nc" id="L48">        var log = new LogAuditoria();</span>
+<span class="nc" id="L49">        log.setUsuarioEmail(emailUsuario);</span>
+<span class="nc" id="L50">        log.setAcao(&quot;CADASTRO_PRAZO&quot;);</span>
+<span class="nc" id="L51">        log.setEntidade(&quot;Prazo&quot;);</span>
+<span class="nc" id="L52">        log.setEntidadeId(prazo.getId());</span>
+<span class="nc" id="L53">        log.setDadosNovos(&quot;Processo: &quot; + processo.getNumeroUnico()</span>
+                + &quot;, Vencimento: &quot; + dataVencimento
+                + &quot;, Descrição: &quot; + descricao);
+<span class="nc" id="L56">        logAuditoriaRepository.save(log);</span>
+
+<span class="nc" id="L58">        return prazo;</span>
+    }
+
+    @Transactional
+    public Prazo cumprir(UUID id, String emailUsuario) {
+<span class="nc" id="L63">        Prazo prazo = prazoRepository.findById(id)</span>
+<span class="nc" id="L64">                .orElseThrow(() -&gt; new RuntimeException(&quot;Prazo não encontrado&quot;));</span>
+
+<span class="nc" id="L66">        prazo.setStatus(StatusPrazo.CUMPRIDO);</span>
+<span class="nc" id="L67">        prazo.setDataCumprimento(LocalDate.now());</span>
+
+<span class="nc" id="L69">        prazoRepository.save(prazo);</span>
+
+<span class="nc" id="L71">        var log = new LogAuditoria();</span>
+<span class="nc" id="L72">        log.setUsuarioEmail(emailUsuario);</span>
+<span class="nc" id="L73">        log.setAcao(&quot;CUMPRIR_PRAZO&quot;);</span>
+<span class="nc" id="L74">        log.setEntidade(&quot;Prazo&quot;);</span>
+<span class="nc" id="L75">        log.setEntidadeId(prazo.getId());</span>
+<span class="nc" id="L76">        logAuditoriaRepository.save(log);</span>
+
+<span class="nc" id="L78">        return prazo;</span>
+    }
+
+    public List&lt;Prazo&gt; listarPorProcesso(UUID processoId) {
+<span class="nc" id="L82">        return prazoRepository.findByProcessoId(processoId);</span>
+    }
+
+    public List&lt;Prazo&gt; listarPorResponsavel(UUID responsavelId) {
+<span class="nc" id="L86">        return prazoRepository.findByResponsavelId(responsavelId);</span>
+    }
+
+    public List&lt;Prazo&gt; listarVencidos() {
+<span class="nc" id="L90">        return prazoRepository.findPrazosVencidos(LocalDate.now());</span>
+    }
+
+    public List&lt;Prazo&gt; listarPorPeriodo(LocalDate inicio, LocalDate fim) {
+<span class="nc" id="L94">        return prazoRepository.findByDataVencimentoBetween(inicio, fim);</span>
+    }
+
+    @Transactional
+    public void atualizarPrazosVencidos() {
+<span class="nc" id="L99">        List&lt;Prazo&gt; vencidos = prazoRepository</span>
+<span class="nc" id="L100">                .findPrazosVencidos(LocalDate.now());</span>
+
+<span class="nc bnc" id="L102" title="All 2 branches missed.">        for (Prazo prazo : vencidos) {</span>
+<span class="nc" id="L103">            prazo.setStatus(StatusPrazo.VENCIDO);</span>
+<span class="nc" id="L104">        }</span>
+
+<span class="nc" id="L106">        prazoRepository.saveAll(vencidos);</span>
+<span class="nc" id="L107">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

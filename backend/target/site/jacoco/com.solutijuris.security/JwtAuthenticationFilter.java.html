@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="pt"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>JwtAuthenticationFilter.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">SolutiJuris</a> &gt; <a href="index.source.html" class="el_package">com.solutijuris.security</a> &gt; <span class="el_source">JwtAuthenticationFilter.java</span></div><h1>JwtAuthenticationFilter.java</h1><pre class="source lang-java linenums">package com.solutijuris.security;
+
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Component;
+import org.springframework.web.filter.OncePerRequestFilter;
+
+import java.io.IOException;
+import java.util.List;
+
+@Component
+@RequiredArgsConstructor
+public class JwtAuthenticationFilter extends OncePerRequestFilter {
+
+    private final JwtProvider jwtProvider;
+
+    @Override
+    protected void doFilterInternal(HttpServletRequest request,
+                                    HttpServletResponse response,
+                                    FilterChain filterChain) throws ServletException, IOException {
+<span class="fc" id="L27">        String token = extractToken(request);</span>
+
+<span class="pc bpc" id="L29" title="1 of 4 branches missed.">        if (token != null &amp;&amp; jwtProvider.validateToken(token)) {</span>
+<span class="fc" id="L30">            String email = jwtProvider.getEmailFromToken(token);</span>
+<span class="fc" id="L31">            String perfil = jwtProvider.getPerfilFromToken(token);</span>
+
+<span class="fc" id="L33">            var authorities = List.of(new SimpleGrantedAuthority(&quot;ROLE_&quot; + perfil));</span>
+<span class="fc" id="L34">            var authentication = new UsernamePasswordAuthenticationToken(</span>
+                    email, null, authorities);
+<span class="fc" id="L36">            SecurityContextHolder.getContext().setAuthentication(authentication);</span>
+        }
+
+<span class="fc" id="L39">        filterChain.doFilter(request, response);</span>
+<span class="fc" id="L40">    }</span>
+
+    private String extractToken(HttpServletRequest request) {
+<span class="fc" id="L43">        String header = request.getHeader(&quot;Authorization&quot;);</span>
+<span class="pc bpc" id="L44" title="1 of 4 branches missed.">        if (header != null &amp;&amp; header.startsWith(&quot;Bearer &quot;)) {</span>
+<span class="fc" id="L45">            return header.substring(7);</span>
+        }
+<span class="fc" id="L47">        return null;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

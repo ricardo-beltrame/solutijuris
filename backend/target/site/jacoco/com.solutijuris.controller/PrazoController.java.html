@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="pt"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PrazoController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">SolutiJuris</a> &gt; <a href="index.source.html" class="el_package">com.solutijuris.controller</a> &gt; <span class="el_source">PrazoController.java</span></div><h1>PrazoController.java</h1><pre class="source lang-java linenums">package com.solutijuris.controller;
+
+import com.solutijuris.dto.PrazoRequest;
+import com.solutijuris.model.entity.Prazo;
+import com.solutijuris.service.PrazoService;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDate;
+import java.util.List;
+import java.util.UUID;
+
+@RestController
+@RequestMapping(&quot;/prazos&quot;)
+@RequiredArgsConstructor
+public class PrazoController {
+
+    private final PrazoService prazoService;
+
+    @PostMapping
+    public ResponseEntity&lt;Prazo&gt; cadastrar(
+            @Valid @RequestBody PrazoRequest request,
+            Authentication authentication) {
+<span class="nc" id="L28">        var prazo = prazoService.cadastrar(</span>
+<span class="nc" id="L29">                request.processoId(),</span>
+<span class="nc" id="L30">                request.responsavelId(),</span>
+<span class="nc" id="L31">                request.dataVencimento(),</span>
+<span class="nc" id="L32">                request.descricao(),</span>
+<span class="nc" id="L33">                authentication.getName());</span>
+<span class="nc" id="L34">        return ResponseEntity.status(HttpStatus.CREATED).body(prazo);</span>
+    }
+
+    @PatchMapping(&quot;/{id}/cumprir&quot;)
+    public ResponseEntity&lt;Prazo&gt; cumprir(
+            @PathVariable UUID id,
+            Authentication authentication) {
+<span class="nc" id="L41">        return ResponseEntity.ok(prazoService.cumprir(id, authentication.getName()));</span>
+    }
+
+    @GetMapping(&quot;/processo/{processoId}&quot;)
+    public ResponseEntity&lt;List&lt;Prazo&gt;&gt; listarPorProcesso(
+            @PathVariable UUID processoId) {
+<span class="nc" id="L47">        return ResponseEntity.ok(prazoService.listarPorProcesso(processoId));</span>
+    }
+
+    @GetMapping(&quot;/responsavel/{responsavelId}&quot;)
+    public ResponseEntity&lt;List&lt;Prazo&gt;&gt; listarPorResponsavel(
+            @PathVariable UUID responsavelId) {
+<span class="nc" id="L53">        return ResponseEntity.ok(prazoService.listarPorResponsavel(responsavelId));</span>
+    }
+
+    @GetMapping(&quot;/vencidos&quot;)
+    public ResponseEntity&lt;List&lt;Prazo&gt;&gt; listarVencidos() {
+<span class="nc" id="L58">        return ResponseEntity.ok(prazoService.listarVencidos());</span>
+    }
+
+    @GetMapping(&quot;/periodo&quot;)
+    public ResponseEntity&lt;List&lt;Prazo&gt;&gt; listarPorPeriodo(
+            @RequestParam LocalDate inicio,
+            @RequestParam LocalDate fim) {
+<span class="nc" id="L65">        return ResponseEntity.ok(prazoService.listarPorPeriodo(inicio, fim));</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

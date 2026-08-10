@@ -1,0 +1,5 @@
+com/solutijuris/service/ProcessoServiceTest.class
+com/solutijuris/service/UsuarioServiceTest.class
+com/solutijuris/controller/AuthControllerTest.class
+com/solutijuris/IntegrationTest.class
+com/solutijuris/service/CnjValidatorTest.class

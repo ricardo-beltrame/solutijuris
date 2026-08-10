@@ -1,0 +1,35 @@
+spring:
+  application:
+    name: solutijuris
+
+  datasource:
+    url: jdbc:postgresql://localhost:5433/solutijuris
+    username: admin
+    password: admin123
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+  data:
+    redis:
+      host: localhost
+      port: 6379
+
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: admin
+    password: admin123
+
+server:
+  port: 8080
+
+jwt:
+  secret: "YN2kV8mHpL4sR7wX9zB3fQ6cJ1gU5tA0eD8yW2nM4kP7rV9bC6xZ3hL1jF5qT8w"
+  expiration: 86400000

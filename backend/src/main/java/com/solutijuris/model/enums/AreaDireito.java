@@ -1,0 +1,19 @@
+package com.solutijuris.model.enums;
+
+public enum AreaDireito {
+    CIVEL,
+    PENAL,
+    TRABALHISTA,
+    TRIBUTARIO,
+    PREVIDENCIARIO,
+    FAMILIA,
+    EMPRESARIAL,
+    CONSUMIDOR,
+    ADMINISTRATIVO,
+    CONSTITUCIONAL,
+    TRABALHISTA_EMPRESA,
+    IMOBILIARIO,
+    DIGITAL,
+    TRABALHISTA_SINDICAL,
+    SAUDE
+}
