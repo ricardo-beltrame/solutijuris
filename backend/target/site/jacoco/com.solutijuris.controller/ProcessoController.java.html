@@ -24,9 +24,9 @@ public class ProcessoController {
     public ResponseEntity&lt;Processo&gt; cadastrar(
             @Valid @RequestBody ProcessoRequest request,
             Authentication authentication) {
-<span class="nc" id="L27">        String email = authentication.getName();</span>
-<span class="nc" id="L28">        var processo = processoService.cadastrar(request, email);</span>
-<span class="nc" id="L29">        return ResponseEntity.status(HttpStatus.CREATED).body(processo);</span>
+<span class="fc" id="L27">        String email = authentication.getName();</span>
+<span class="fc" id="L28">        var processo = processoService.cadastrar(request, email);</span>
+<span class="fc" id="L29">        return ResponseEntity.status(HttpStatus.CREATED).body(processo);</span>
     }
 
     @GetMapping
@@ -36,19 +36,19 @@ public class ProcessoController {
 
     @GetMapping(&quot;/{id}&quot;)
     public ResponseEntity&lt;Processo&gt; buscarPorId(@PathVariable UUID id) {
-<span class="nc" id="L39">        return ResponseEntity.ok(processoService.buscarPorId(id));</span>
+<span class="fc" id="L39">        return ResponseEntity.ok(processoService.buscarPorId(id));</span>
     }
 
     @GetMapping(&quot;/numero/{numeroUnico}&quot;)
     public ResponseEntity&lt;Processo&gt; buscarPorNumero(
             @PathVariable String numeroUnico) {
-<span class="nc" id="L45">        return ResponseEntity.ok(processoService.buscarPorNumeroUnico(numeroUnico));</span>
+<span class="fc" id="L45">        return ResponseEntity.ok(processoService.buscarPorNumeroUnico(numeroUnico));</span>
     }
 
     @GetMapping(&quot;/responsavel/{responsavelId}&quot;)
     public ResponseEntity&lt;List&lt;Processo&gt;&gt; listarPorResponsavel(
             @PathVariable UUID responsavelId) {
-<span class="nc" id="L51">        return ResponseEntity.ok(processoService.listarPorResponsavel(responsavelId));</span>
+<span class="fc" id="L51">        return ResponseEntity.ok(processoService.listarPorResponsavel(responsavelId));</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

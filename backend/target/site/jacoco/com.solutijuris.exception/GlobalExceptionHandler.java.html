@@ -15,8 +15,8 @@ import java.util.stream.Collectors;
 
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity&lt;MensagemResponse&gt; handleRuntime(RuntimeException ex) {
-<span class="nc" id="L18">        return ResponseEntity.status(HttpStatus.BAD_REQUEST)</span>
-<span class="nc" id="L19">                .body(new MensagemResponse(ex.getMessage()));</span>
+<span class="fc" id="L18">        return ResponseEntity.status(HttpStatus.BAD_REQUEST)</span>
+<span class="fc" id="L19">                .body(new MensagemResponse(ex.getMessage()));</span>
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -43,8 +43,8 @@ import java.util.stream.Collectors;
 
     @ExceptionHandler(ProcessoNaoEncontradoException.class)
     public ResponseEntity&lt;Map&lt;String, String&gt;&gt; handleProcessoNaoEncontrado(ProcessoNaoEncontradoException ex) {
-<span class="nc" id="L46">        return ResponseEntity.status(HttpStatus.NOT_FOUND)</span>
-<span class="nc" id="L47">                .body(Map.of(&quot;mensagem&quot;, ex.getMessage()));</span>
+<span class="fc" id="L46">        return ResponseEntity.status(HttpStatus.NOT_FOUND)</span>
+<span class="fc" id="L47">                .body(Map.of(&quot;mensagem&quot;, ex.getMessage()));</span>
     }
 
     @ExceptionHandler(ResponsavelNaoEncontradoException.class)

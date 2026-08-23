@@ -1,0 +1,35 @@
+.mat-mdc-button, .mat-mdc-raised-button, .mat-mdc-outlined-button {
+  border-radius: var(--radius);
+  transition: box-shadow var(--transition), background var(--transition);
+}
+
+.mat-mdc-raised-button:hover {
+  box-shadow: var(--shadow-md);
+}
+
+.mat-mdc-form-field {
+  width: 100%;
+}
+
+.mat-mdc-form-field .mat-mdc-text-field-wrapper {
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+.mat-mdc-card {
+  border-radius: var(--radius);
+  background: var(--surface);
+  box-shadow: var(--shadow-md);
+}
+
+.mat-mdc-table {
+  background: var(--surface);
+}
+
+.mat-mdc-header-row {
+  font-weight: 600;
+}
+
+.mat-mdc-row:hover {
+  background: rgba(25, 118, 210, 0.04);
+}

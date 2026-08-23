@@ -1,5 +1,11 @@
 /Users/ricardobeltrame/Projects/solutijuris/backend/src/test/java/com/solutijuris/IntegrationTest.java
 /Users/ricardobeltrame/Projects/solutijuris/backend/src/test/java/com/solutijuris/controller/AuthControllerTest.java
+/Users/ricardobeltrame/Projects/solutijuris/backend/src/test/java/com/solutijuris/controller/ProcessoControllerTest.java
+/Users/ricardobeltrame/Projects/solutijuris/backend/src/test/java/com/solutijuris/security/JwtProviderTest.java
 /Users/ricardobeltrame/Projects/solutijuris/backend/src/test/java/com/solutijuris/service/CnjValidatorTest.java
+/Users/ricardobeltrame/Projects/solutijuris/backend/src/test/java/com/solutijuris/service/DashboardControllerTest.java
+/Users/ricardobeltrame/Projects/solutijuris/backend/src/test/java/com/solutijuris/service/DashboardServiceTest.java
+/Users/ricardobeltrame/Projects/solutijuris/backend/src/test/java/com/solutijuris/service/PrazoControllerTest.java
+/Users/ricardobeltrame/Projects/solutijuris/backend/src/test/java/com/solutijuris/service/PrazoServiceTest.java
 /Users/ricardobeltrame/Projects/solutijuris/backend/src/test/java/com/solutijuris/service/ProcessoServiceTest.java
 /Users/ricardobeltrame/Projects/solutijuris/backend/src/test/java/com/solutijuris/service/UsuarioServiceTest.java

@@ -1,0 +1,30 @@
+html, body { height: 100%; margin: 0; background: var(--background); }
+
+.app-toolbar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  width: 100%;
+  background: var(--primary);
+  color: #fff;
+}
+
+.app-sidenav-container {
+  height: calc(100vh - 64px);
+}
+
+.app-sidenav {
+  width: 260px;
+  background: var(--surface-variant);
+  border-right: 1px solid var(--border);
+}
+
+.mat-drawer-content {
+  background: var(--background);
+}
+
+.app-content {
+  padding: 24px;
+  min-height: 100%;
+  box-sizing: border-box;
+}

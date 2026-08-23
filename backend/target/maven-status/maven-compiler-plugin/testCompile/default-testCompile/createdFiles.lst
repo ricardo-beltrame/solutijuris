@@ -1,5 +1,11 @@
-com/solutijuris/service/ProcessoServiceTest.class
+com/solutijuris/service/DashboardServiceTest.class
+com/solutijuris/controller/ProcessoControllerTest.class
+com/solutijuris/controller/DashboardControllerTest.class
 com/solutijuris/service/UsuarioServiceTest.class
 com/solutijuris/controller/AuthControllerTest.class
 com/solutijuris/IntegrationTest.class
 com/solutijuris/service/CnjValidatorTest.class
+com/solutijuris/service/ProcessoServiceTest.class
+com/solutijuris/service/PrazoServiceTest.class
+com/solutijuris/security/JwtProviderTest.class
+com/solutijuris/controller/PrazoControllerTest.class

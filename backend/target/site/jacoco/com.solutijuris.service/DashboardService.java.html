@@ -22,15 +22,15 @@ public class DashboardService {
     private final UsuarioRepository usuarioRepository;
 
     public DashboardDTO obterIndicadores() {
-<span class="nc" id="L25">        long totalProcessos = processoRepository.count();</span>
-<span class="nc" id="L26">        long totalUsuarios = usuarioRepository.count();</span>
-<span class="nc" id="L27">        long prazosVencidos = prazoRepository.findPrazosVencidos(LocalDate.now()).size();</span>
-<span class="nc" id="L28">        long prazosAbertos = prazoRepository.findByStatus(StatusPrazo.ABERTO).size();</span>
-<span class="nc" id="L29">        long prazosCumpridos = prazoRepository.findByStatus(StatusPrazo.CUMPRIDO).size();</span>
-<span class="nc" id="L30">        long processosAtivos = processoRepository.findByStatus(StatusProcesso.ATIVO).size();</span>
-<span class="nc" id="L31">        long processosArquivados = processoRepository.findByStatus(StatusProcesso.ARQUIVADO).size();</span>
+<span class="fc" id="L25">        long totalProcessos = processoRepository.count();</span>
+<span class="fc" id="L26">        long totalUsuarios = usuarioRepository.count();</span>
+<span class="fc" id="L27">        long prazosVencidos = prazoRepository.findPrazosVencidos(LocalDate.now()).size();</span>
+<span class="fc" id="L28">        long prazosAbertos = prazoRepository.findByStatus(StatusPrazo.ABERTO).size();</span>
+<span class="fc" id="L29">        long prazosCumpridos = prazoRepository.findByStatus(StatusPrazo.CUMPRIDO).size();</span>
+<span class="fc" id="L30">        long processosAtivos = processoRepository.findByStatus(StatusProcesso.ATIVO).size();</span>
+<span class="fc" id="L31">        long processosArquivados = processoRepository.findByStatus(StatusProcesso.ARQUIVADO).size();</span>
 
-<span class="nc" id="L33">        return new DashboardDTO(</span>
+<span class="fc" id="L33">        return new DashboardDTO(</span>
                 totalProcessos,
                 totalUsuarios,
                 prazosVencidos,
@@ -42,20 +42,20 @@ public class DashboardService {
     }
 
     public Map&lt;String, Long&gt; obterDistribuicaoPorArea() {
-<span class="nc" id="L45">        Map&lt;String, Long&gt; distribuicao = new LinkedHashMap&lt;&gt;();</span>
-<span class="nc bnc" id="L46" title="All 2 branches missed.">        for (AreaDireito area : AreaDireito.values()) {</span>
-<span class="nc" id="L47">            long count = processoRepository.findByStatus(StatusProcesso.ATIVO)</span>
-<span class="nc" id="L48">                    .stream()</span>
-<span class="nc bnc" id="L49" title="All 2 branches missed.">                    .filter(p -&gt; p.getAreaDireito() == area)</span>
-<span class="nc" id="L50">                    .count();</span>
-<span class="nc bnc" id="L51" title="All 2 branches missed.">            if (count &gt; 0) {</span>
-<span class="nc" id="L52">                distribuicao.put(area.name(), count);</span>
+<span class="fc" id="L45">        Map&lt;String, Long&gt; distribuicao = new LinkedHashMap&lt;&gt;();</span>
+<span class="fc bfc" id="L46" title="All 2 branches covered.">        for (AreaDireito area : AreaDireito.values()) {</span>
+<span class="fc" id="L47">            long count = processoRepository.findByStatus(StatusProcesso.ATIVO)</span>
+<span class="fc" id="L48">                    .stream()</span>
+<span class="fc bfc" id="L49" title="All 2 branches covered.">                    .filter(p -&gt; p.getAreaDireito() == area)</span>
+<span class="fc" id="L50">                    .count();</span>
+<span class="fc bfc" id="L51" title="All 2 branches covered.">            if (count &gt; 0) {</span>
+<span class="fc" id="L52">                distribuicao.put(area.name(), count);</span>
             }
         }
-<span class="nc" id="L55">        return distribuicao;</span>
+<span class="fc" id="L55">        return distribuicao;</span>
     }
 
-<span class="nc" id="L58">    public record DashboardDTO(</span>
+<span class="fc" id="L58">    public record DashboardDTO(</span>
             long totalProcessos,
             long totalUsuarios,
             long prazosVencidos,

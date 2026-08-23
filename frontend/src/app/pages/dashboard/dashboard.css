@@ -1,0 +1,89 @@
+.dashboard-container {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.page-title {
+  margin: 0;
+  color: var(--on-surface);
+}
+
+.page-subtitle {
+  margin: 0;
+  color: var(--gray-600);
+}
+
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+}
+
+.indicator-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  transition: box-shadow var(--transition), transform var(--transition);
+}
+
+.indicator-card:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+
+.indicator-content {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 20px;
+}
+
+.indicator-icon {
+  font-size: 40px;
+  width: 40px;
+  height: 40px;
+}
+
+.indicator-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.indicator-value {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--on-surface);
+}
+
+.indicator-label {
+  color: var(--gray-600);
+}
+
+.prazos-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+}
+
+.status-badge {
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.status-badge.aberto {
+  background: rgba(25, 118, 210, 0.1);
+  color: var(--primary);
+}
+
+.status-badge.pendente {
+  background: rgba(255, 152, 0, 0.1);
+  color: #f57c00;
+}
+
+.status-badge.cumprido {
+  background: rgba(76, 175, 80, 0.1);
+  color: #388e3c;
+}
