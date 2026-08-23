@@ -14,6 +14,7 @@ export const jwtInterceptor: HttpInterceptorFn = (req, next) => {
     return next(req);
   }
 
+  // Injeta o Bearer token se existir
   if (token) {
     req = req.clone({
       setHeaders: { Authorization: `Bearer ${token}` },
@@ -22,6 +23,7 @@ export const jwtInterceptor: HttpInterceptorFn = (req, next) => {
 
   return next(req).pipe(
     catchError((error: HttpErrorResponse) => {
+      // Se 401, limpa sessão e vai para login
       if (error.status === 401) {
         auth.logout();
       }
