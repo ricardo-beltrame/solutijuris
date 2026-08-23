@@ -1,37 +1,33 @@
-import { Injectable } from '@angular/core';
-import {
-  HttpInterceptor,
-  HttpRequest,
-  HttpHandler,
-  HttpEvent,
-  HttpErrorResponse,
-} from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { HttpInterceptorFn, HttpErrorResponse } from '@angular/common/http';
+import { inject } from '@angular/core';
+import { Router } from '@angular/router';
+import { catchError, throwError } from 'rxjs';
 import { AuthService } from './auth.service';
 
-@Injectable()
-export class JwtInterceptor implements HttpInterceptor {
-  constructor(private auth: AuthService) {}
+export const jwtInterceptor: HttpInterceptorFn = (req, next) => {
+  const auth = inject(AuthService);
+  const router = inject(Router);
+  const token = auth.getToken();
 
-  intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    const token = this.auth.getToken();
-
-    // Injeta o Bearer token se existir
-    if (token) {
-      req = req.clone({
-        setHeaders: { Authorization: `Bearer ${token}` },
-      });
-    }
-
-    return next.handle(req).pipe(
-      catchError((error: HttpErrorResponse) => {
-        // Se 401 (não autenticado), limpa sessão e vai para login
-        if (error.status === 401) {
-          this.auth.logout();
-        }
-        return throwError(() => error);
-      }),
-    );
+  // Não injeta token em requisições de autenticação
+  if (req.url.includes('/api/auth/')) {
+    return next(req);
   }
-}
+
+  // Injeta o Bearer token se existir
+  if (token) {
+    req = req.clone({
+      setHeaders: { Authorization: `Bearer ${token}` },
+    });
+  }
+
+  return next(req).pipe(
+    catchError((error: HttpErrorResponse) => {
+      // Se 401, limpa sessão e vai para login
+      if (error.status === 401) {
+        auth.logout();
+      }
+      return throwError(() => error);
+    }),
+  );
+};
