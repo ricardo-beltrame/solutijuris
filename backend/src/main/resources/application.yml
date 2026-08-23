@@ -29,6 +29,8 @@ spring:
 
 server:
   port: 8080
+  servlet:
+    context-path: /api
 
 jwt:
   secret: "YN2kV8mHpL4sR7wX9zB3fQ6cJ1gU5tA0eD8yW2nM4kP7rV9bC6xZ3hL1jF5qT8w"
