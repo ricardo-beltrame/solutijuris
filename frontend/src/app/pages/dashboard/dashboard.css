@@ -1,48 +1,39 @@
 .dashboard-container {
+  padding: 24px;
+}
+
+.loading-wrapper,
+.error-wrapper {
   display: flex;
   flex-direction: column;
-  gap: 24px;
-}
-
-.page-title {
-  margin: 0;
-  color: var(--on-surface);
-}
-
-.page-subtitle {
-  margin: 0;
-  color: var(--gray-600);
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  min-height: 300px;
 }
 
 .cards-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
   gap: 16px;
+  margin-bottom: 24px;
 }
 
 .indicator-card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  box-shadow: var(--shadow-sm);
-  transition: box-shadow var(--transition), transform var(--transition);
-}
-
-.indicator-card:hover {
-  box-shadow: var(--shadow-md);
-  transform: translateY(-2px);
+  border: 1px solid var(--border, #e0e0e0);
+  box-shadow: var(--shadow-md, 0 2px 8px rgba(0, 0, 0, 0.08));
 }
 
 .indicator-content {
   display: flex;
   align-items: center;
   gap: 16px;
-  padding: 20px;
 }
 
 .indicator-icon {
-  font-size: 40px;
-  width: 40px;
-  height: 40px;
+  font-size: 2.5rem;
+  width: 2.5rem;
+  height: 2.5rem;
 }
 
 .indicator-info {
@@ -53,20 +44,32 @@
 .indicator-value {
   font-size: 1.75rem;
   font-weight: 700;
-  color: var(--on-surface);
+  color: var(--on-surface, #212121);
 }
 
 .indicator-label {
-  color: var(--gray-600);
+  color: var(--on-surface-variant, #757575);
 }
 
 .prazos-card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border, #e0e0e0);
+}
+
+.prazos-card mat-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.empty-state {
+  text-align: center;
+  color: var(--on-surface-variant, #757575);
+  padding: 24px;
 }
 
 .status-badge {
+  display: inline-block;
   padding: 4px 12px;
   border-radius: 12px;
   font-size: 0.75rem;
@@ -74,16 +77,21 @@
 }
 
 .status-badge.aberto {
-  background: rgba(25, 118, 210, 0.1);
-  color: var(--primary);
+  background: rgba(25, 118, 210, 0.12);
+  color: #1976d2;
 }
 
-.status-badge.pendente {
-  background: rgba(255, 152, 0, 0.1);
-  color: #f57c00;
+.status-badge.vencido {
+  background: rgba(211, 47, 47, 0.12);
+  color: #d32f2f;
 }
 
 .status-badge.cumprido {
-  background: rgba(76, 175, 80, 0.1);
+  background: rgba(56, 142, 60, 0.12);
   color: #388e3c;
+}
+
+.status-badge.pendente {
+  background: rgba(245, 124, 0, 0.12);
+  color: #f57c00;
 }

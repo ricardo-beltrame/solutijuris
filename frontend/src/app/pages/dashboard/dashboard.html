@@ -1,49 +1,74 @@
 <div class="dashboard-container">
-  <h1 class="page-title">Dashboard</h1>
-  <p class="caption page-subtitle">Visão geral do escritório</p>
+  @if (loading()) {
+    <div class="loading-wrapper">
+      <mat-spinner diameter="40"></mat-spinner>
+    </div>
+  } @else {
+    @if (erro()) {
+      <div class="error-wrapper">
+        <mat-icon color="warn">error_outline</mat-icon>
+        <p>{{ erro() }}</p>
+        <button mat-raised-button color="primary" (click)="recarregar()">
+          Tentar novamente
+        </button>
+      </div>
+    } @else {
+      <!-- Cards de indicadores -->
+      <div class="cards-grid">
+        @for (item of cards(); track item.label) {
+          <mat-card class="indicator-card">
+            <mat-card-content class="indicator-content">
+              <mat-icon class="indicator-icon" [color]="item.cor">{{ item.icone }}</mat-icon>
+              <div class="indicator-info">
+                <span class="indicator-value">{{ item.valor }}</span>
+                <span class="caption indicator-label">{{ item.label }}</span>
+              </div>
+            </mat-card-content>
+          </mat-card>
+        }
+      </div>
 
-  <div class="cards-grid">
-    @for (item of indicadores; track item.label) {
-    <mat-card class="indicator-card">
-      <mat-card-content class="indicator-content">
-        <mat-icon class="indicator-icon" [color]="item.cor">{{ item.icone }}</mat-icon>
-        <div class="indicator-info">
-          <span class="indicator-value">{{ item.valor }}</span>
-          <span class="caption indicator-label">{{ item.label }}</span>
-        </div>
-      </mat-card-content>
-    </mat-card>
+      <!-- Tabela de prazos próximos -->
+      <mat-card class="prazos-card">
+        <mat-card-header>
+          <mat-card-title>Prazos Próximos</mat-card-title>
+          <span class="caption">Próximos 7 dias</span>
+        </mat-card-header>
+        <mat-card-content>
+          @if (prazosProximos().length === 0) {
+            <p class="empty-state">Nenhum prazo próximo encontrado.</p>
+          } @else {
+            <table mat-table [dataSource]="prazosProximos()" class="mat-elevation-z0">
+              <ng-container matColumnDef="descricao">
+                <th mat-header-cell *matHeaderCellDef>Descrição</th>
+                <td mat-cell *matCellDef="let prazo">{{ prazo.descricao }}</td>
+              </ng-container>
+
+              <ng-container matColumnDef="processo">
+                <th mat-header-cell *matHeaderCellDef>Processo</th>
+                <td mat-cell *matCellDef="let prazo">{{ prazo.processoNumero || prazo.processoId }}</td>
+              </ng-container>
+
+              <ng-container matColumnDef="vencimento">
+                <th mat-header-cell *matHeaderCellDef>Vencimento</th>
+                <td mat-cell *matCellDef="let prazo">{{ prazo.dataVencimento | date: 'dd/MM/yyyy' }}</td>
+              </ng-container>
+
+              <ng-container matColumnDef="status">
+                <th mat-header-cell *matHeaderCellDef>Status</th>
+                <td mat-cell *matCellDef="let prazo">
+                  <span class="status-badge" [class]="'status-badge ' + prazo.status.toLowerCase()">
+                    {{ prazo.status }}
+                  </span>
+                </td>
+              </ng-container>
+
+              <tr mat-header-row *matHeaderRowDef="colunas"></tr>
+              <tr mat-row *matRowDef="let row; columns: colunas"></tr>
+            </table>
+          }
+        </mat-card-content>
+      </mat-card>
     }
-  </div>
-
-  <mat-card class="prazos-card">
-    <mat-card-header>
-      <mat-card-title>Prazos Próximos</mat-card-title>
-    </mat-card-header>
-    <mat-card-content>
-      <table mat-table [dataSource]="prazosProximos" class="mat-elevation-z0">
-        <ng-container matColumnDef="descricao">
-          <th mat-header-cell *matHeaderCellDef>Descrição</th>
-          <td mat-cell *matCellDef="let prazo">{{ prazo.descricao }}</td>
-        </ng-container>
-        <ng-container matColumnDef="processo">
-          <th mat-header-cell *matHeaderCellDef>Processo</th>
-          <td mat-cell *matCellDef="let prazo">{{ prazo.processo }}</td>
-        </ng-container>
-        <ng-container matColumnDef="vencimento">
-          <th mat-header-cell *matHeaderCellDef>Vencimento</th>
-          <td mat-cell *matCellDef="let prazo">{{ prazo.vencimento }}</td>
-        </ng-container>
-        <ng-container matColumnDef="status">
-          <th mat-header-cell *matHeaderCellDef>Status</th>
-          <td mat-cell *matCellDef="let prazo">
-            <span class="status-badge" [class]="'status-badge ' + prazo.status.toLowerCase()">{{ prazo.status }}</span>
-          </td>
-        </ng-container>
-
-        <tr mat-header-row *matHeaderRowDef="['descricao', 'processo', 'vencimento', 'status']"></tr>
-        <tr mat-row *matRowDef="let row; columns: ['descricao', 'processo', 'vencimento', 'status']"></tr>
-      </table>
-    </mat-card-content>
-  </mat-card>
+  }
 </div>
