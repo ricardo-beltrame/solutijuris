@@ -1,0 +1,198 @@
+.prazos-container {
+  padding: 24px;
+}
+
+.page-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.header-title {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.header-title h1 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--on-surface, #212121);
+  margin: 0;
+}
+
+.caption {
+  color: var(--on-surface-variant, #757575);
+  font-size: 0.875rem;
+}
+
+/* Filtros */
+.filtros-row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+
+.filtro-btn {
+  height: 40px;
+  border-radius: 20px;
+}
+
+.badge-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  height: 20px;
+  border-radius: 10px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 0 6px;
+  margin-left: 4px;
+}
+
+.badge-warn {
+  background: rgba(211, 47, 47, 0.15);
+  color: #d32f2f;
+}
+
+.badge-info {
+  background: rgba(25, 118, 210, 0.15);
+  color: #1976d2;
+}
+
+/* Loading / Error / Empty */
+.loading-wrapper,
+.error-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  min-height: 300px;
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 48px;
+  color: var(--on-surface-variant, #757575);
+}
+
+.empty-state mat-icon {
+  font-size: 3rem;
+  width: 3rem;
+  height: 3rem;
+  opacity: 0.4;
+}
+
+/* Table */
+.table-card {
+  border: 1px solid var(--border, #e0e0e0);
+}
+
+.numero-cnj {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 0.8125rem;
+}
+
+.descricao-text {
+  font-weight: 500;
+}
+
+/* Vencimento + Urgência */
+.vencimento-cell {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.urgencia-tag {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  padding: 2px 6px;
+  border-radius: 4px;
+  width: fit-content;
+}
+
+.urgencia-vencido {
+  background: rgba(211, 47, 47, 0.12);
+  color: #c62828;
+}
+
+.urgencia-critico {
+  background: rgba(245, 124, 0, 0.12);
+  color: #ef6c00;
+}
+
+.urgencia-atencao {
+  background: rgba(25, 118, 210, 0.12);
+  color: #1976d2;
+}
+
+/* Status badges */
+.status-badge {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.status-aberto {
+  background: rgba(25, 118, 210, 0.12);
+  color: #1976d2;
+}
+
+.status-cumprido {
+  background: rgba(56, 142, 60, 0.12);
+  color: #2e7d32;
+}
+
+.status-vencido {
+  background: rgba(211, 47, 47, 0.12);
+  color: #c62828;
+}
+
+.status-prorrogado {
+  background: rgba(245, 124, 0, 0.12);
+  color: #ef6c00;
+}
+
+.status-cancelado {
+  background: rgba(97, 97, 97, 0.12);
+  color: #616161;
+}
+
+.acao-placeholder {
+  color: var(--on-surface-variant, #bdc3c7);
+}
+
+.prazo-row:hover {
+  background: rgba(25, 118, 210, 0.04);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .page-header {
+    flex-direction: column;
+  }
+
+  .filtros-row {
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    padding-bottom: 4px;
+  }
+
+  .filtro-btn {
+    white-space: nowrap;
+  }
+}
