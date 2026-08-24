@@ -89,7 +89,7 @@
                   <span>{{ formatarData(prazo.dataVencimento) }}</span>
                   @if (prazo.status === 'ABERTO') {
                     @if (diasRestantes(prazo.dataVencimento) < 0) {
-                      <span class="urgencia-tag urgencia-vencido">Vencido há {{ Math.abs(diasRestantes(prazo.dataVencimento)) }}d</span>
+                      <span class="urgencia-tag urgencia-vencido">Vencido há {{ diasRestantesAbs(prazo.dataVencimento) }}d</span>
                     } @else if (diasRestantes(prazo.dataVencimento) <= 3) {
                       <span class="urgencia-tag urgencia-critico">{{ diasRestantes(prazo.dataVencimento) }}d restantes</span>
                     } @else if (diasRestantes(prazo.dataVencimento) <= 7) {

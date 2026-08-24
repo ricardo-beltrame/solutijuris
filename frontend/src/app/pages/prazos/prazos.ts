@@ -8,6 +8,7 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatMenuModule } from '@angular/material/menu';
 import { PrazoService } from '../../core/services/prazo.service';
 import { Prazo } from '../../core/models/prazo.model';
+import { MatCardModule } from '@angular/material/card';
 
 type Filtro = 'todos' | 'vencidos' | 'proximos7' | 'proximos30';
 
@@ -22,6 +23,7 @@ type Filtro = 'todos' | 'vencidos' | 'proximos7' | 'proximos30';
     MatProgressSpinnerModule,
     MatChipsModule,
     MatMenuModule,
+    MatCardModule,
   ],
   templateUrl: './prazos.html',
   styleUrls: ['./prazos.css'],
@@ -142,5 +144,9 @@ export class Prazos {
     data.setHours(0, 0, 0, 0);
     const diff = data.getTime() - hoje.getTime();
     return Math.ceil(diff / (1000 * 60 * 60 * 24));
+  }
+
+  diasRestantesAbs(dataVencimento: string): number {
+    return Math.abs(this.diasRestantes(dataVencimento));
   }
 }

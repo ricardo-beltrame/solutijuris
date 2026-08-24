@@ -10,6 +10,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatChipsModule } from '@angular/material/chips';
 import { ProcessoService } from '../../core/services/processo.service';
 import { Processo } from '../../core/models/processo.model';
+import { MatCardModule } from '@angular/material/card';
 
 @Component({
   selector: 'app-processos',
@@ -24,6 +25,7 @@ import { Processo } from '../../core/models/processo.model';
     MatIconModule,
     MatProgressSpinnerModule,
     MatChipsModule,
+    MatCardModule,
   ],
   templateUrl: './processos.html',
   styleUrls: ['./processos.css'],
