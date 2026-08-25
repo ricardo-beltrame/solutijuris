@@ -155,4 +155,8 @@
   .refresh-btn {
     height: 48px;
   }
+  .new-btn {
+    height: 56px;
+    white-space: nowrap;
+  }
 }

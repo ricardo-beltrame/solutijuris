@@ -11,6 +11,9 @@ import { MatChipsModule } from '@angular/material/chips';
 import { ProcessoService } from '../../core/services/processo.service';
 import { Processo } from '../../core/models/processo.model';
 import { MatCardModule } from '@angular/material/card';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { ProcessoFormDialog } from './processo-form-dialog';
+import { AuthService } from '../../core/auth/auth.service';
 
 @Component({
   selector: 'app-processos',
@@ -26,11 +29,14 @@ import { MatCardModule } from '@angular/material/card';
     MatProgressSpinnerModule,
     MatChipsModule,
     MatCardModule,
+    MatDialogModule,
   ],
   templateUrl: './processos.html',
   styleUrls: ['./processos.css'],
 })
 export class Processos {
+  private readonly dialog = inject(MatDialog);
+  private readonly auth = inject(AuthService);
   private readonly processoService = inject(ProcessoService);
 
   readonly processos = signal<Processo[]>([]);
@@ -129,5 +135,23 @@ export class Processos {
   formatarData(data?: string): string {
     if (!data) return '-';
     return new Date(data).toLocaleDateString('pt-BR');
+  }
+
+  abrirNovoProcesso(): void {
+    const responsavelId = this.auth.user()?.id ?? '';
+
+    const dialogRef = this.dialog.open(ProcessoFormDialog, {
+      width: '640px',
+      maxWidth: '95vw',
+      data: { responsavelId },
+    });
+
+    dialogRef.afterClosed().subscribe({
+      next: (result) => {
+        if (result) {
+          this.carregar();
+        }
+      },
+    });
   }
 }

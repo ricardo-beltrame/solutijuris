@@ -5,7 +5,6 @@
       <h1>Processos</h1>
       <span class="caption">{{ processosFiltrados().length }} processo(s)</span>
     </div>
-
     <div class="header-actions">
       <mat-form-field appearance="outline" class="search-field">
         <mat-label>Buscar por número, área, responsável...</mat-label>
@@ -24,7 +23,12 @@
         }
       </mat-form-field>
 
-      <button mat-raised-button color="primary" class="refresh-btn" (click)="carregar()">
+      <button mat-raised-button color="primary" class="new-btn" (click)="abrirNovoProcesso()">
+        <mat-icon>add</mat-icon>
+        Novo Processo
+      </button>
+
+      <button mat-stroked-button (click)="carregar()">
         <mat-icon>refresh</mat-icon>
         Atualizar
       </button>
