@@ -14,13 +14,13 @@ class CnjValidatorTest {
     @Test
     @DisplayName("Deve aceitar número CNJ válido")
     void deveAceitarNumeroValido() {
-        assertTrue(validator.validar("1234567-31.2024.8.26.0100"));
+        assertTrue(validator.validar("7250057-21.2026.5.18.1540"));
     }
 
     @Test
     @DisplayName("Deve aceitar número CNJ real válido")
     void deveAceitarNumeroRealValido() {
-        assertTrue(validator.validar("0001112-19.2023.8.26.0286"));
+        assertTrue(validator.validar("2050028-67.2026.2.00.8952"));
     }
 
     @ParameterizedTest
