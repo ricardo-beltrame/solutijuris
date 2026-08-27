@@ -33,3 +33,146 @@
 .mat-mdc-row:hover {
   background: rgba(25, 118, 210, 0.04);
 }
+/* ===== Padrões compartilhados entre páginas ===== */
+
+/* Cabeçalho de página */
+.page-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+
+.header-title {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.page-title {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--on-surface, #212121);
+  margin: 0;
+}
+
+.page-subtitle {
+  font-size: 0.875rem;
+  color: var(--gray-600, #757575);
+  margin: 0;
+}
+
+/* Container padrão de página */
+.page-container {
+  padding: 32px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* Card de tabela padrão */
+.table-card {
+  border: 1px solid var(--border, #e0e0e0);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.table-card .mat-mdc-card-content {
+  padding: 0 !important;
+}
+
+.table-card .mat-mdc-table {
+  width: 100%;
+}
+
+/* Empty state padrão */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 48px 24px;
+  color: var(--gray-600, #757575);
+}
+
+.empty-state mat-icon {
+  font-size: 3rem;
+  width: 3rem;
+  height: 3rem;
+  opacity: 0.4;
+}
+
+/* Status badges padrão */
+.status-badge {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 8px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.status-badge.aberto,
+.status-badge.ativo {
+  background: rgba(25, 118, 210, 0.1);
+  color: #1976d2;
+}
+
+.status-badge.vencido {
+  background: rgba(211, 47, 47, 0.1);
+  color: #d32f2f;
+}
+
+.status-badge.cumprido,
+.status-badge.arquivado {
+  background: rgba(56, 142, 60, 0.1);
+  color: #388e3c;
+}
+
+.status-badge.pendente {
+  background: rgba(245, 124, 0, 0.1);
+  color: #f57c00;
+}
+
+/* Loading e error wrappers */
+.loading-wrapper,
+.error-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  min-height: 300px;
+}
+
+/* Filtros padrão */
+.filters-row {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.filter-chip {
+  border-radius: 8px;
+  font-weight: 500;
+}
+
+/* Botão de ação no header */
+.header-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+/* Responsive */
+@media (max-width: 599px) {
+  .page-container {
+    padding: 16px;
+  }
+
+  .page-title {
+    font-size: 1.5rem;
+  }
+}

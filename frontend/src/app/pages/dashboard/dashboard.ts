@@ -34,10 +34,34 @@ export class Dashboard {
     const dados = this.indicadores();
     if (!dados) return [];
     return [
-      { label: 'Processos Ativos', valor: dados.processosAtivos, icone: 'gavel', cor: 'primary' },
-      { label: 'Prazos Vencidos', valor: dados.prazosVencidos, icone: 'warning', cor: 'warn' },
-      { label: 'Prazos Abertos', valor: dados.prazosAbertos, icone: 'event', cor: 'accent' },
-      { label: 'Advogados', valor: dados.totalUsuarios, icone: 'people', cor: 'primary' },
+      {
+        label: 'Processos Ativos',
+        valor: dados.processosAtivos,
+        icone: 'gavel',
+        bgColor: 'rgba(25, 118, 210, 0.1)',
+        iconColor: '#1976d2',
+      },
+      {
+        label: 'Prazos Vencidos',
+        valor: dados.prazosVencidos,
+        icone: 'warning',
+        bgColor: 'rgba(211, 47, 47, 0.1)',
+        iconColor: '#d32f2f',
+      },
+      {
+        label: 'Prazos Abertos',
+        valor: dados.prazosAbertos,
+        icone: 'event',
+        bgColor: 'rgba(245, 124, 0, 0.1)',
+        iconColor: '#f57c00',
+      },
+      {
+        label: 'Advogados',
+        valor: dados.totalUsuarios,
+        icone: 'people',
+        bgColor: 'rgba(56, 142, 60, 0.1)',
+        iconColor: '#388e3c',
+      },
     ];
   });
 

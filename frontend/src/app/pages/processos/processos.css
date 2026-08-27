@@ -160,3 +160,18 @@
     white-space: nowrap;
   }
 }
+
+/* Específico de Processos — herda o restante de components.css */
+
+.search-row {
+  margin-bottom: 20px;
+}
+
+.search-field {
+  max-width: 400px;
+}
+
+.processo-row {
+  cursor: pointer;
+  transition: background var(--transition);
+}
