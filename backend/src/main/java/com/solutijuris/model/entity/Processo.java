@@ -1,5 +1,6 @@
 package com.solutijuris.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.solutijuris.model.enums.AreaDireito;
 import com.solutijuris.model.enums.StatusProcesso;
 import com.solutijuris.model.enums.Tribunal;
@@ -52,6 +53,7 @@ public class Processo extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "responsavel_id", nullable = false)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private Usuario responsavel;
 
     @Column(name = "polo_ativo", columnDefinition = "TEXT")

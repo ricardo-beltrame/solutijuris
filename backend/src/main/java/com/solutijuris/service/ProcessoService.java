@@ -39,7 +39,7 @@ public class ProcessoService {
             throw new ProcessoInvalidoException("Número único já cadastrado");
         }
 
-        Usuario responsavel = usuarioRepository.findById(request.responsavelId())
+        Usuario responsavel = usuarioRepository.findByEmail(emailUsuario)
                 .orElseThrow(() -> new ResponsavelNaoEncontradoException("Responsável não encontrado"));
 
         var processo = new Processo();

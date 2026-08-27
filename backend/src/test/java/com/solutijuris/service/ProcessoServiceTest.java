@@ -67,17 +67,16 @@ class ProcessoServiceTest {
                 false,
                 new BigDecimal(5000.00),
                 "João da Silva",
-                "Empresa XYZ Ltda",
-                responsavelId
+                "Empresa XYZ Ltda"
         );
 
         var responsavel = new Usuario();
         responsavel.setId(responsavelId);
-        responsavel.setEmail("ricardo@solutijuris.com");
+        responsavel.setEmail("admin@solutijuris.com");
 
         when(cnjValidator.validar(request.numeroUnico())).thenReturn(true);
         when(processoRepository.existsByNumeroUnico(request.numeroUnico())).thenReturn(false);
-        when(usuarioRepository.findById(responsavelId)).thenReturn(Optional.of(responsavel));
+        when(usuarioRepository.findByEmail("admin@solutijuris.com")).thenReturn(Optional.of(responsavel));
         when(processoRepository.save(any(Processo.class)))
                 .thenAnswer(invocation -> invocation.getArgument(0));
 
@@ -104,8 +103,7 @@ class ProcessoServiceTest {
                 false,
                 null,
                 "Autor",
-                "Réu",
-                UUID.randomUUID()
+                "Réu"
         );
 
         when(cnjValidator.validar(request.numeroUnico())).thenReturn(false);
@@ -129,8 +127,7 @@ class ProcessoServiceTest {
                 false,
                 null,
                 "Autor",
-                "Réu",
-                UUID.randomUUID()
+                "Réu"
         );
 
         when(cnjValidator.validar(request.numeroUnico())).thenReturn(true);

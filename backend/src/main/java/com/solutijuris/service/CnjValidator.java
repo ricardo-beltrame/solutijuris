@@ -17,30 +17,24 @@ public class CnjValidator {
 
         String apenasDigitos = numeroUnico.replaceAll("[^0-9]", "");
 
-        // Estrutura: NNNNNNN-DD.AAAA.J.TR.OOOO
-        // NNNNNNN (0-6) | DD (7-8) | AAAA (9-12) | J (13) | TR (14-15) | OOOO (16-19)
-        String base = apenasDigitos.substring(0, 7)   // NNNNNNN
-                + apenasDigitos.substring(9, 20);     // AAAA + J + TR + OOOO (18 dígitos)
-        String digitosInformados = apenasDigitos.substring(7, 9); // DD
+        // NNNNNNN-DD.AAAA.J.TR.OOOO → 20 dígitos
+        String n    = apenasDigitos.substring(0, 7);    // NNNNNNN
+        String dd   = apenasDigitos.substring(7, 9);    // DD
+        String aaaa = apenasDigitos.substring(9, 13);   // AAAA
+        String j    = apenasDigitos.substring(13, 14);  // J
+        String tr   = apenasDigitos.substring(14, 16);  // TR
+        String oooo = apenasDigitos.substring(16, 20);  // OOOO
 
-        return digitosInformados.equals(calcularDigitosVerificadores(base));
-    }
+        // Algoritmo Módulo 97 Base 10 (ISO 7064:2003) — Resolução CNJ 65/2008
+        // Etapa 1: NNNNNNN % 97
+        long operacao1 = Long.parseLong(n) % 97;
 
-    private String calcularDigitosVerificadores(String base) {
-        int d1 = calcularDigito(base);
-        int d2 = calcularDigito(base + d1);
-        return String.format("%d%d", d1, d2);
-    }
+        // Etapa 2: (operacao1 + AAAA + J + TR) % 97
+        long operacao2 = Long.parseLong(operacao1 + aaaa + j + tr) % 97;
 
-    private int calcularDigito(String numero) {
-        int soma = 0;
-        int peso = 2;
-        for (int i = numero.length() - 1; i >= 0; i--) {
-            int digito = numero.charAt(i) - '0';
-            soma += digito * peso;
-            peso = (peso == 9) ? 2 : peso + 1;
-        }
-        int resto = soma % 11;
-        return (resto == 0 || resto == 1) ? 0 : 11 - resto;
+        // Etapa 3: (operacao2 + OOOO + DD) % 97 → deve ser 1
+        long operacaoFinal = Long.parseLong(operacao2 + oooo + dd) % 97;
+
+        return operacaoFinal == 1;
     }
 }
