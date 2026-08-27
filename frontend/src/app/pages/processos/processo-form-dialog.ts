@@ -127,6 +127,15 @@ export class ProcessoFormDialog {
   }
 
   salvar(): void {
+    console.log('=== SALVAR CHAMADO ===');
+    console.log('Form válido?', this.form.valid);
+    console.log('Valores:', this.form.getRawValue());
+    Object.keys(this.form.controls).forEach((key) => {
+      const c = this.form.get(key);
+      if (c?.invalid) {
+        console.log(`Campo inválido: ${key}`, c.errors);
+      }
+    });
     if (this.form.invalid) {
       this.form.markAllAsTouched();
       return;

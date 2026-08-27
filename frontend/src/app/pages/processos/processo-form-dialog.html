@@ -107,17 +107,14 @@
   </mat-dialog-content>
 
   <mat-dialog-actions class="dialog-actions" align="end">
-    <button mat-stroked-button (click)="cancelar()" [disabled]="loading()">
+    <button mat-stroked-button type="button" (click)="cancelar()" [disabled]="loading()">
       Cancelar
     </button>
-    <button mat-raised-button color="primary" (click)="salvar()" [disabled]="loading()">
+    <button mat-raised-button color="primary" type="button" (click)="salvar()" [disabled]="loading()">
       @if (loading()) {
         <mat-spinner diameter="20"></mat-spinner>
       } @else {
-        <ng-container>
-          <mat-icon>save</mat-icon>
-          Cadastrar
-        </ng-container>
+        Cadastrar
       }
     </button>
   </mat-dialog-actions>
