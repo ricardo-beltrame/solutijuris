@@ -6,9 +6,10 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatMenuModule } from '@angular/material/menu';
+import { MatCardModule } from '@angular/material/card';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { PrazoService } from '../../core/services/prazo.service';
 import { Prazo } from '../../core/models/prazo.model';
-import { MatCardModule } from '@angular/material/card';
 
 type Filtro = 'todos' | 'vencidos' | 'proximos7' | 'proximos30';
 
@@ -24,6 +25,7 @@ type Filtro = 'todos' | 'vencidos' | 'proximos7' | 'proximos30';
     MatChipsModule,
     MatMenuModule,
     MatCardModule,
+    MatTooltipModule,
   ],
   templateUrl: './prazos.html',
   styleUrls: ['./prazos.css'],
@@ -45,10 +47,10 @@ export class Prazos {
     { key: 'proximos30' as Filtro, label: 'Próximos 30 dias', icone: 'date_range' },
   ];
 
-  // Contagem por status para badges nos filtros
   readonly countVencidos = computed(
     () => this.prazos().filter((p) => p.status === 'VENCIDO').length,
   );
+
   readonly countProximos7 = computed(() => {
     const hoje = new Date();
     const limite = new Date();
@@ -79,44 +81,40 @@ export class Prazos {
           this.loading.set(false);
         },
       });
+    } else if (filtro === 'proximos7') {
+      this.prazoService.listarProximos(7).subscribe({
+        next: (dados) => {
+          this.prazos.set(dados);
+          this.loading.set(false);
+        },
+        error: () => {
+          this.erro.set('Erro ao carregar prazos próximos.');
+          this.loading.set(false);
+        },
+      });
+    } else if (filtro === 'proximos30') {
+      this.prazoService.listarProximos(30).subscribe({
+        next: (dados) => {
+          this.prazos.set(dados);
+          this.loading.set(false);
+        },
+        error: () => {
+          this.erro.set('Erro ao carregar prazos próximos.');
+          this.loading.set(false);
+        },
+      });
     } else {
-      // Para "todos", "proximos7" e "proximos30", usa listarPorPeriodo
-      const hoje = new Date().toISOString().split('T')[0];
-      let fim: string;
-
-      if (filtro === 'proximos7') {
-        const d = new Date();
-        d.setDate(d.getDate() + 7);
-        fim = d.toISOString().split('T')[0];
-      } else if (filtro === 'proximos30') {
-        const d = new Date();
-        d.setDate(d.getDate() + 30);
-        fim = d.toISOString().split('T')[0];
-      } else {
-        // "todos" — busca um período amplo (início do ano até +90 dias)
-        const inicio = new Date(new Date().getFullYear(), 0, 1).toISOString().split('T')[0];
-        const d = new Date();
-        d.setDate(d.getDate() + 90);
-        fim = d.toISOString().split('T')[0];
-        this.buscarPorPeriodo(inicio, fim);
-        return;
-      }
-
-      this.buscarPorPeriodo(hoje, fim);
+      this.prazoService.listarTodos().subscribe({
+        next: (dados) => {
+          this.prazos.set(dados);
+          this.loading.set(false);
+        },
+        error: () => {
+          this.erro.set('Erro ao carregar prazos.');
+          this.loading.set(false);
+        },
+      });
     }
-  }
-
-  private buscarPorPeriodo(inicio: string, fim: string): void {
-    this.prazoService.listarPorPeriodo(inicio, fim).subscribe({
-      next: (dados) => {
-        this.prazos.set(dados);
-        this.loading.set(false);
-      },
-      error: () => {
-        this.erro.set('Erro ao carregar prazos.');
-        this.loading.set(false);
-      },
-    });
   }
 
   cumprirPrazo(prazo: Prazo, event: Event): void {
@@ -132,16 +130,14 @@ export class Prazos {
     });
   }
 
-  formatarData(data?: string): string {
-    if (!data) return '-';
+  formatarData(data: string): string {
     return new Date(data).toLocaleDateString('pt-BR');
   }
 
   diasRestantes(dataVencimento: string): number {
+    const data = new Date(dataVencimento);
     const hoje = new Date();
     hoje.setHours(0, 0, 0, 0);
-    const data = new Date(dataVencimento);
-    data.setHours(0, 0, 0, 0);
     const diff = data.getTime() - hoje.getTime();
     return Math.ceil(diff / (1000 * 60 * 60 * 24));
   }

@@ -64,4 +64,9 @@ public class PrazoController {
             @RequestParam LocalDate fim) {
         return ResponseEntity.ok(prazoService.listarPorPeriodo(inicio, fim));
     }
+
+    @GetMapping
+    public ResponseEntity<List<Prazo>> listarTodos() {
+        return ResponseEntity.ok(prazoService.listarTodos());
+    }
 }

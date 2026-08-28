@@ -9,6 +9,22 @@ export class PrazoService {
 
   constructor(private http: HttpClient) {}
 
+  listarTodos(): Observable<Prazo[]> {
+    return this.http.get<Prazo[]>(this.API);
+  }
+
+  listarProximos(dias: number = 7): Observable<Prazo[]> {
+    const hoje = new Date();
+    const limite = new Date();
+    limite.setDate(limite.getDate() + dias);
+    return this.http.get<Prazo[]>(`${this.API}/periodo`, {
+      params: {
+        inicio: hoje.toISOString().split('T')[0],
+        fim: limite.toISOString().split('T')[0],
+      },
+    });
+  }
+
   listarPorProcesso(processoId: string): Observable<Prazo[]> {
     return this.http.get<Prazo[]>(`${this.API}/processo/${processoId}`);
   }

@@ -1,10 +1,201 @@
 .dashboard-container {
-  padding: 32px;
-  max-width: 1400px;
-  margin: 0 auto;
+  padding: 24px;
 }
 
-/* Loading e Error */
+/* ===================== KPI CARDS ===================== */
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.kpi-card {
+  background: var(--surface);
+  border-radius: var(--radius);
+  padding: 20px 24px;
+  box-shadow: var(--shadow-card);
+  border: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  transition: transform var(--transition), box-shadow var(--transition);
+  cursor: pointer;
+}
+
+.kpi-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.kpi-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.kpi-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.kpi-icon mat-icon {
+  font-size: 24px;
+  width: 24px;
+  height: 24px;
+}
+
+.kpi-icon-blue   { background: var(--info-bg);    color: var(--info); }
+.kpi-icon-amber  { background: var(--warning-bg); color: var(--warning); }
+.kpi-icon-red    { background: var(--danger-bg);  color: var(--danger); }
+.kpi-icon-green  { background: var(--success-bg); color: var(--success); }
+.kpi-icon-purple { background: rgba(156, 39, 176, 0.10); color: #8e24aa; }
+
+.kpi-label {
+  font-size: var(--label);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--on-surface-variant);
+}
+
+.kpi-value {
+  font-size: 2.25rem;
+  font-weight: 800;
+  color: var(--on-surface);
+  line-height: 1.1;
+}
+
+.kpi-trend {
+  font-size: var(--caption);
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.kpi-trend-up   { color: var(--success); }
+.kpi-trend-down { color: var(--danger); }
+
+/* ===================== SECTIONS ===================== */
+.section-row {
+  display: grid;
+  grid-template-columns: 1.6fr 1fr;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+@media (max-width: 1024px) {
+  .section-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+.section-card {
+  border: 1px solid var(--border);
+}
+
+.section-card mat-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border);
+}
+
+.section-card mat-card-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--on-surface);
+  margin: 0;
+}
+
+.section-card mat-card-content {
+  padding: 0;
+}
+
+/* ===================== PRAZOS LIST ===================== */
+.prazo-list-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 20px;
+  border-bottom: 1px solid var(--border);
+  transition: background var(--transition);
+}
+
+.prazo-list-item:hover {
+  background: var(--surface-variant);
+}
+
+.prazo-list-item:last-child {
+  border-bottom: none;
+}
+
+.urgency-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.urgency-dot-red    { background: var(--danger); }
+.urgency-dot-amber  { background: var(--warning); }
+.urgency-dot-green  { background: var(--success); }
+
+.prazo-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.prazo-desc {
+  font-size: var(--body);
+  font-weight: 500;
+  color: var(--on-surface);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.prazo-date {
+  font-size: var(--caption);
+  color: var(--on-surface-variant);
+}
+
+.prazo-badge {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 20px;
+  white-space: nowrap;
+}
+
+.prazo-badge-red    { background: var(--danger-bg);  color: var(--danger); }
+.prazo-badge-amber  { background: var(--warning-bg); color: var(--warning); }
+.prazo-badge-green  { background: var(--success-bg); color: var(--success); }
+
+/* ===================== EMPTY ===================== */
+.empty-state {
+  text-align: center;
+  color: var(--on-surface-variant);
+  padding: 48px 24px;
+}
+
+.empty-state mat-icon {
+  font-size: 3rem;
+  width: 3rem;
+  height: 3rem;
+  opacity: 0.4;
+}
+
+/* ===================== LOADING / ERROR ===================== */
 .loading-wrapper,
 .error-wrapper {
   display: flex;
@@ -15,178 +206,31 @@
   min-height: 300px;
 }
 
-/* Cabeçalho da página */
-.page-header {
-  margin-bottom: 28px;
-}
-
-.page-title {
-  font-size: 1.75rem;
-  font-weight: 700;
-  color: var(--on-surface, #212121);
-  margin: 0 0 4px 0;
-}
-
-.page-subtitle {
-  font-size: 0.875rem;
-  color: var(--on-surface-variant, #757575);
-  margin: 0;
-}
-
-/* Grid de cards */
-.cards-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-  gap: 20px;
-  margin-bottom: 28px;
-}
-
-/* Card de indicador */
-.indicator-card {
-  border: 1px solid var(--border, #e0e0e0);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
-  transition: box-shadow 0.2s ease, transform 0.2s ease;
-  border-radius: 12px;
-}
-
-.indicator-card:hover {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-  transform: translateY(-2px);
-}
-
-.indicator-content {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  padding: 20px !important;
-}
-
-/* Container do ícone — parecido com a referência */
-.indicator-icon-wrapper {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 52px;
-  height: 52px;
-  border-radius: 12px;
-  flex-shrink: 0;
-}
-
-.indicator-icon {
-  font-size: 1.75rem;
-  width: 1.75rem;
-  height: 1.75rem;
-}
-
-.indicator-info {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-
-.indicator-value {
-  font-size: 1.625rem;
-  font-weight: 700;
-  color: var(--on-surface, #212121);
-  line-height: 1.2;
-}
-
-.indicator-label {
-  font-size: 0.8125rem;
-  color: var(--on-surface-variant, #757575);
-  font-weight: 500;
-}
-
-/* Card de prazos */
-.prazos-card {
-  border: 1px solid var(--border, #e0e0e0);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
-  border-radius: 12px;
-  overflow: hidden;
-}
-
-.prazos-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 20px 24px 12px;
-  border-bottom: 1px solid var(--border, #e0e0e0);
-}
-
-.prazos-title {
-  font-size: 1.125rem;
-  font-weight: 600;
-  color: var(--on-surface, #212121);
-  margin: 0;
-}
-
-.prazos-subtitle {
-  font-size: 0.8125rem;
-  color: var(--on-surface-variant, #757575);
-}
-
-/* Tabela */
-.prazos-table {
+/* ===================== TABLE ===================== */
+.dashboard-table {
   width: 100%;
 }
 
-.empty-state {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 12px;
-  padding: 48px 24px;
-  color: var(--on-surface-variant, #757575);
-}
-
-.empty-state mat-icon {
-  font-size: 3rem;
-  width: 3rem;
-  height: 3rem;
-  opacity: 0.4;
-}
-
-/* Status badges */
-.status-badge {
-  display: inline-block;
-  padding: 4px 12px;
-  border-radius: 8px;
-  font-size: 0.75rem;
+.dashboard-table .mat-mdc-header-row {
+  font-size: var(--label);
   font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--on-surface-variant);
+  background: var(--surface-variant);
 }
 
-.status-badge.aberto {
-  background: rgba(25, 118, 210, 0.1);
-  color: #1976d2;
+.dashboard-table .mat-mdc-row {
+  border-bottom: 1px solid var(--border);
+  min-height: 52px;
 }
 
-.status-badge.vencido {
-  background: rgba(211, 47, 47, 0.1);
-  color: #d32f2f;
+.dashboard-table .mat-mdc-row:hover {
+  background: rgba(245, 166, 35, 0.04);
 }
 
-.status-badge.cumprido {
-  background: rgba(56, 142, 60, 0.1);
-  color: #388e3c;
-}
-
-.status-badge.pendente {
-  background: rgba(245, 124, 0, 0.1);
-  color: #f57c00;
-}
-
-/* Responsive */
-@media (max-width: 599px) {
-  .dashboard-container {
-    padding: 16px;
-  }
-
-  .cards-grid {
-    grid-template-columns: 1fr;
-    gap: 12px;
-  }
-
-  .page-title {
-    font-size: 1.5rem;
-  }
+.numero-cnj {
+  font-family: var(--font-mono, 'Roboto Mono', monospace);
+  font-size: 0.8125rem;
+  font-weight: 500;
 }

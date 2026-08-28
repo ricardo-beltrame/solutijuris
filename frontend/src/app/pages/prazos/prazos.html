@@ -1,113 +1,145 @@
-<div class="page-container">
+<div class="prazos-container">
+  <!-- Header -->
+  <div class="page-header">
+    <div class="header-title">
+      <h1>Prazos</h1>
+      <span class="caption">{{ prazos().length }} prazo(s) encontrados</span>
+    </div>
+    <div class="header-actions">
+      <button mat-raised-button color="primary" (click)="carregar(filtroAtual())">
+        <mat-icon>refresh</mat-icon>
+        Atualizar
+      </button>
+    </div>
+  </div>
+
+  <!-- Filtros -->
+  <div class="filtros-row">
+    @for (filtro of filtros; track filtro.key) {
+      <button
+        mat-stroked-button
+        [class.filtro-btn]="true"
+        [class.active]="filtroAtual() === filtro.key"
+        (click)="carregar(filtro.key)"
+      >
+        <mat-icon>{{ filtro.icone }}</mat-icon>
+        {{ filtro.label }}
+        @if (filtro.key === 'vencidos' && countVencidos() > 0) {
+          <span class="badge-count badge-warn">{{ countVencidos() }}</span>
+        }
+        @if (filtro.key === 'proximos7' && countProximos7() > 0) {
+          <span class="badge-count badge-info">{{ countProximos7() }}</span>
+        }
+      </button>
+    }
+  </div>
+
+  <!-- Loading -->
   @if (loading()) {
     <div class="loading-wrapper">
       <mat-spinner diameter="40"></mat-spinner>
     </div>
-  } @else {
-    @if (erro()) {
-      <div class="error-wrapper">
-        <mat-icon color="warn">error_outline</mat-icon>
-        <p>{{ erro() }}</p>
-        <button mat-raised-button color="primary" (click)="carregar('todos')">
-          Tentar novamente
-        </button>
-      </div>
-    } @else {
-      <div class="page-header">
-        <div class="header-title">
-          <h1 class="page-title">Prazos</h1>
-          <p class="page-subtitle">Acompanhe e cumpra os prazos processuais</p>
-        </div>
-        <div class="header-actions">
-          <button mat-stroked-button (click)="carregar(filtroAtual())" matTooltip="Atualizar">
-            <mat-icon>refresh</mat-icon>
-          </button>
-        </div>
-      </div>
+  }
 
-      <div class="filters-row">
-        <mat-chip-set>
-          @for (f of filtros; track f.key) {
-            <mat-chip (click)="carregar(f.key)" [class.selected]="filtroAtual() === f.key">
-              <mat-icon matChipAvatar>{{ f.icone }}</mat-icon>
-              {{ f.label }}
-            </mat-chip>
-          }
-        </mat-chip-set>
-      </div>
+  <!-- Erro -->
+  @else if (erro()) {
+    <div class="error-wrapper">
+      <mat-icon>error_outline</mat-icon>
+      <p>{{ erro() }}</p>
+      <button mat-raised-button color="primary" (click)="carregar(filtroAtual())">
+        Tentar novamente
+      </button>
+    </div>
+  }
 
-      <mat-card class="table-card">
-        <mat-card-content>
-          @if (prazos().length === 0) {
-            <div class="empty-state">
-              <mat-icon>event_busy</mat-icon>
-              <p>Nenhum prazo encontrado para este filtro.</p>
-            </div>
-          } @else {
-            <table mat-table [dataSource]="prazos()" class="mat-elevation-z0">
-              <ng-container matColumnDef="descricao">
-                <th mat-header-cell *matHeaderCellDef>Descrição</th>
-                <td mat-cell *matCellDef="let prazo">{{ prazo.descricao }}</td>
-              </ng-container>
+  <!-- Tabela -->
+  @else {
+    <mat-card class="table-card">
+      <mat-card-content>
+        @if (prazos().length === 0) {
+          <div class="empty-state">
+            <mat-icon>event_busy</mat-icon>
+            <p>Nenhum prazo encontrado para este filtro.</p>
+          </div>
+        } @else {
+          <table mat-table [dataSource]="prazos()" class="mat-elevation-z0">
+            <ng-container matColumnDef="descricao">
+              <th mat-header-cell *matHeaderCellDef>Descrição</th>
+              <td mat-cell *matCellDef="let prazo">
+                <span class="descricao-text">{{ prazo.descricao }}</span>
+              </td>
+            </ng-container>
 
-              <ng-container matColumnDef="processo">
-                <th mat-header-cell *matHeaderCellDef>Processo</th>
-                <td mat-cell *matCellDef="let prazo">{{ prazo.processoNumero || prazo.processoId }}</td>
-              </ng-container>
+            <ng-container matColumnDef="processo">
+              <th mat-header-cell *matHeaderCellDef>Processo</th>
+              <td mat-cell *matCellDef="let prazo">
+                <span class="numero-cnj">{{ prazo.processo?.numeroUnico || prazo.processo?.id }}</span>
+              </td>
+            </ng-container>
 
-              <ng-container matColumnDef="responsavel">
-                <th mat-header-cell *matHeaderCellDef>Responsável</th>
-                <td mat-cell *matCellDef="let prazo">{{ prazo.responsavelNome || '—' }}</td>
-              </ng-container>
+            <ng-container matColumnDef="responsavel">
+              <th mat-header-cell *matHeaderCellDef>Responsável</th>
+              <td mat-cell *matCellDef="let prazo">
+                {{ prazo.responsavel?.nomeCompleto || '-' }}
+              </td>
+            </ng-container>
 
-              <ng-container matColumnDef="vencimento">
-                <th mat-header-cell *matHeaderCellDef>Vencimento</th>
-                <td mat-cell *matCellDef="let prazo">
-                  <div class="vencimento-cell">
-                    <span>{{ prazo.dataVencimento | date: 'dd/MM/yyyy' }}</span>
+            <ng-container matColumnDef="vencimento">
+              <th mat-header-cell *matHeaderCellDef>Vencimento</th>
+              <td mat-cell *matCellDef="let prazo">
+                <div class="vencimento-cell">
+                  <span>{{ formatarData(prazo.dataVencimento) }}</span>
+                  @if (prazo.status === 'ABERTO') {
                     @if (diasRestantes(prazo.dataVencimento) < 0) {
                       <span class="urgencia-tag urgencia-vencido">
                         Vencido há {{ diasRestantesAbs(prazo.dataVencimento) }}d
                       </span>
-                    } @else if (diasRestantes(prazo.dataVencimento) <= 7) {
-                      <span class="urgencia-tag urgencia-urgente">
+                    } @else if (diasRestantes(prazo.dataVencimento) <= 3) {
+                      <span class="urgencia-tag urgencia-critico">
                         {{ diasRestantes(prazo.dataVencimento) }}d restantes
                       </span>
-                    } @else {
-                      <span class="urgencia-tag urgencia-normal">
+                    } @else if (diasRestantes(prazo.dataVencimento) <= 7) {
+                      <span class="urgencia-tag urgencia-atencao">
                         {{ diasRestantes(prazo.dataVencimento) }}d restantes
                       </span>
                     }
-                  </div>
-                </td>
-              </ng-container>
-
-              <ng-container matColumnDef="status">
-                <th mat-header-cell *matHeaderCellDef>Status</th>
-                <td mat-cell *matCellDef="let prazo">
-                  <span class="status-badge" [class]="prazo.status.toLowerCase()">
-                    {{ prazo.status }}
-                  </span>
-                </td>
-              </ng-container>
-
-              <ng-container matColumnDef="acoes">
-                <th mat-header-cell *matHeaderCellDef>Ações</th>
-                <td mat-cell *matCellDef="let prazo">
-                  @if (prazo.status === 'ABERTO') {
-                    <button mat-icon-button color="primary" (click)="cumprirPrazo(prazo.id, $event)" matTooltip="Marcar como cumprido">
-                      <mat-icon>check_circle</mat-icon>
-                    </button>
                   }
-                </td>
-              </ng-container>
+                </div>
+              </td>
+            </ng-container>
 
-              <tr mat-header-row *matHeaderRowDef="colunas"></tr>
-              <tr mat-row *matRowDef="let row; columns: colunas" class="prazo-row"></tr>
-            </table>
-          }
-        </mat-card-content>
-      </mat-card>
-    }
+            <ng-container matColumnDef="status">
+              <th mat-header-cell *matHeaderCellDef>Status</th>
+              <td mat-cell *matCellDef="let prazo">
+                <span class="status-badge" [class]="'status-' + prazo.status.toLowerCase()">
+                  {{ prazo.status }}
+                </span>
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="acoes">
+              <th mat-header-cell *matHeaderCellDef>Ações</th>
+              <td mat-cell *matCellDef="let prazo">
+                @if (prazo.status === 'ABERTO' || prazo.status === 'VENCIDO') {
+                  <button
+                    mat-icon-button
+                    color="primary"
+                    (click)="cumprirPrazo(prazo, $event)"
+                    matTooltip="Marcar como cumprido"
+                  >
+                    <mat-icon>check_circle</mat-icon>
+                  </button>
+                } @else {
+                  <span class="acao-placeholder">-</span>
+                }
+              </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="colunas"></tr>
+            <tr mat-row *matRowDef="let row; columns: colunas" class="prazo-row"></tr>
+          </table>
+        }
+      </mat-card-content>
+    </mat-card>
   }
 </div>

@@ -105,4 +105,8 @@ public class PrazoService {
 
         prazoRepository.saveAll(vencidos);
     }
+
+    public List<Prazo> listarTodos() {
+        return prazoRepository.findAll();
+    }
 }

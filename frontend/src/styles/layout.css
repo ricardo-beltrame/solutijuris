@@ -1,30 +1,45 @@
-html, body { height: 100%; margin: 0; background: var(--background); }
-
-.app-toolbar {
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  width: 100%;
-  background: var(--primary);
-  color: #fff;
-}
-
-.app-sidenav-container {
-  height: calc(100vh - 64px);
-}
-
-.app-sidenav {
-  width: 260px;
-  background: var(--surface-variant);
-  border-right: 1px solid var(--border);
-}
-
-.mat-drawer-content {
+html, body {
+  height: 100%;
+  margin: 0;
   background: var(--background);
 }
 
-.app-content {
-  padding: 24px;
-  min-height: 100%;
+* {
   box-sizing: border-box;
+}
+
+/* Scrollbar moderna */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--gray-400);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--gray-500);
+}
+
+/* Links */
+a {
+  text-decoration: none;
+  color: var(--primary);
+  transition: color var(--transition);
+}
+
+a:hover {
+  color: var(--primary-light);
+}
+
+/* Selection */
+::selection {
+  background: rgba(245, 166, 35, 0.2);
+  color: var(--on-surface);
 }

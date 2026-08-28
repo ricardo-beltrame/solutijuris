@@ -3,85 +3,106 @@
     <div class="loading-wrapper">
       <mat-spinner diameter="40"></mat-spinner>
     </div>
+  } @else if (erro()) {
+    <div class="error-wrapper">
+      <mat-icon color="warn">error_outline</mat-icon>
+      <p>{{ erro() }}</p>
+      <button mat-raised-button color="primary" (click)="carregar()">
+        Tentar novamente
+      </button>
+    </div>
   } @else {
-    @if (erro()) {
-      <div class="error-wrapper">
-        <mat-icon color="warn">error_outline</mat-icon>
-        <p>{{ erro() }}</p>
-        <button mat-raised-button color="primary" (click)="recarregar()">
-          Tentar novamente
-        </button>
-      </div>
-    } @else {
-      <!-- Cabeçalho da página -->
-      <div class="page-header">
-        <h1 class="page-title">Dashboard</h1>
-        <p class="page-subtitle">Visão geral do escritório</p>
-      </div>
-
-      <!-- Cards de indicadores -->
-      <div class="cards-grid">
-        @for (item of cards(); track item.label) {
-          <mat-card class="indicator-card">
-            <mat-card-content class="indicator-content">
-              <div class="indicator-icon-wrapper" [style.background]="item.bgColor">
-                <mat-icon class="indicator-icon" [style.color]="item.iconColor">{{ item.icone }}</mat-icon>
-              </div>
-              <div class="indicator-info">
-                <span class="indicator-value">{{ item.valor }}</span>
-                <span class="indicator-label">{{ item.label }}</span>
-              </div>
-            </mat-card-content>
-          </mat-card>
-        }
-      </div>
-
-      <!-- Tabela de prazos próximos -->
-      <mat-card class="prazos-card">
-        <div class="prazos-header">
-          <div>
-            <h2 class="prazos-title">Prazos Próximos</h2>
-            <span class="prazos-subtitle">Próximos 7 dias</span>
+    <!-- KPI Cards -->
+    <div class="kpi-grid">
+      @for (item of cards(); track item.label) {
+        <div class="kpi-card">
+          <div class="kpi-card-header">
+            <span class="kpi-label">{{ item.label }}</span>
+            <div class="kpi-icon" [class]="'kpi-icon-' + item.corClass">
+              <mat-icon>{{ item.icone }}</mat-icon>
+            </div>
           </div>
+          <div class="kpi-value">{{ item.valor }}</div>
+          @if (item.trend) {
+            <div class="kpi-trend" [class]="'kpi-trend-' + item.trendDir">
+              <mat-icon style="font-size:16px">{{ item.trendDir === 'up' ? 'trending_up' : 'trending_down' }}</mat-icon>
+              {{ item.trend }}
+            </div>
+          }
         </div>
+      }
+    </div>
+
+    <!-- Seção principal: Tabela + Lista de Prazos -->
+    <div class="section-row">
+      <!-- Coluna esquerda: Prazos próximos em tabela -->
+      <mat-card class="section-card">
+        <mat-card-header>
+          <mat-card-title>Prazos Próximos</mat-card-title>
+          <span class="caption">Próximos 7 dias</span>
+        </mat-card-header>
         <mat-card-content>
           @if (prazosProximos().length === 0) {
             <div class="empty-state">
-              <mat-icon>event_busy</mat-icon>
-              <p>Nenhum prazo próximo encontrado.</p>
+              <mat-icon>event_available</mat-icon>
+              <p>Nenhum prazo próximo.</p>
             </div>
           } @else {
-            <table mat-table [dataSource]="prazosProximos()" class="prazos-table">
+            <table mat-table [dataSource]="prazosProximos()" class="dashboard-table">
               <ng-container matColumnDef="descricao">
                 <th mat-header-cell *matHeaderCellDef>Descrição</th>
                 <td mat-cell *matCellDef="let prazo">{{ prazo.descricao }}</td>
               </ng-container>
-
-              <ng-container matColumnDef="processo">
-                <th mat-header-cell *matHeaderCellDef>Processo</th>
-                <td mat-cell *matCellDef="let prazo">{{ prazo.processoNumero || prazo.processoId }}</td>
-              </ng-container>
-
               <ng-container matColumnDef="vencimento">
                 <th mat-header-cell *matHeaderCellDef>Vencimento</th>
-                <td mat-cell *matCellDef="let prazo">{{ prazo.dataVencimento | date: 'dd/MM/yyyy' }}</td>
+                <td mat-cell *matCellDef="let prazo">
+                  {{ prazo.dataVencimento | date: 'dd/MM/yyyy' }}
+                </td>
               </ng-container>
-
               <ng-container matColumnDef="status">
                 <th mat-header-cell *matHeaderCellDef>Status</th>
                 <td mat-cell *matCellDef="let prazo">
-                  <span class="status-badge" [class]="'status-badge ' + prazo.status.toLowerCase()">
+                  <span class="status-badge" [class]="'status-' + prazo.status.toLowerCase()">
                     {{ prazo.status }}
                   </span>
                 </td>
               </ng-container>
-
               <tr mat-header-row *matHeaderRowDef="colunas"></tr>
               <tr mat-row *matRowDef="let row; columns: colunas"></tr>
             </table>
           }
         </mat-card-content>
       </mat-card>
-    }
+
+      <!-- Coluna direita: Lista visual de prazos -->
+      <mat-card class="section-card">
+        <mat-card-header>
+          <mat-card-title>Urgências</mat-card-title>
+          <span class="caption">Atenção imediata</span>
+        </mat-card-header>
+        <mat-card-content>
+          @for (prazo of prazosProximos().slice(0, 5); track prazo.id) {
+            <div class="prazo-list-item">
+              <div class="urgency-dot"
+                   [class.urgency-dot-red]="prazo.status === 'VENCIDO'"
+                   [class.urgency-dot-amber]="prazo.status === 'ABERTO' && diasRestantes(prazo.dataVencimento) <= 3"
+                   [class.urgency-dot-green]="prazo.status === 'ABERTO' && diasRestantes(prazo.dataVencimento) > 3"
+              ></div>
+              <div class="prazo-info">
+                <span class="prazo-desc">{{ prazo.descricao }}</span>
+                <span class="prazo-date">{{ prazo.dataVencimento | date: 'dd/MM/yyyy' }}</span>
+              </div>
+              <span class="prazo-badge"
+                    [class.prazo-badge-red]="prazo.status === 'VENCIDO'"
+                    [class.prazo-badge-amber]="prazo.status === 'ABERTO' && diasRestantes(prazo.dataVencimento) <= 3"
+                    [class.prazo-badge-green]="prazo.status === 'ABERTO' && diasRestantes(prazo.dataVencimento) > 3"
+              >
+                {{ prazo.status === 'VENCIDO' ? 'Vencido' : diasRestantes(prazo.dataVencimento) + 'd' }}
+              </span>
+            </div>
+          }
+        </mat-card-content>
+      </mat-card>
+    </div>
   }
 </div>

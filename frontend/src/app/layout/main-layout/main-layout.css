@@ -1,85 +1,197 @@
-/* Toolbar */
+/* ===================== TOOLBAR ===================== */
 .app-toolbar {
-  background: var(--primary, #1976d2);
-  color: #ffffff;
+  background: var(--surface);
+  color: var(--on-surface);
   position: sticky;
   top: 0;
   z-index: 100;
   height: 64px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  box-shadow: var(--shadow-md);
+  border-bottom: 1px solid var(--border);
 }
 
 .app-title {
   margin-left: 12px;
-  font-weight: 600;
-  font-size: 1.25rem;
-  letter-spacing: 0.3px;
+  font-weight: 700;
+  font-size: 1.3rem;
+  letter-spacing: -0.5px;
+  color: var(--primary);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.app-title .logo-icon {
+  font-size: 1.5rem;
+  width: 1.5rem;
+  height: 1.5rem;
+  color: var(--accent);
 }
 
 .spacer {
   flex: 1 1 auto;
 }
 
-/* Sidenav */
+/* Toolbar search */
+.toolbar-search {
+  flex: 0 1 400px;
+  margin: 0 24px;
+}
+
+.toolbar-search .mat-mdc-form-field {
+  width: 100%;
+}
+
+.toolbar-search .mat-mdc-text-field-wrapper {
+  background: var(--surface-variant);
+  border-radius: 24px;
+  box-shadow: none;
+}
+
+/* User avatar */
+.user-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--primary);
+  color: var(--on-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: box-shadow var(--transition);
+}
+
+.user-avatar:hover {
+  box-shadow: 0 0 0 3px rgba(245, 166, 35, 0.3);
+}
+
+/* ===================== SIDENAV ===================== */
 .app-sidenav-container {
   height: calc(100vh - 64px);
 }
 
 .app-sidenav {
   width: 260px;
-  background: var(--surface, #ffffff);
-  border-right: 1px solid var(--border, #e0e0e0);
+  background: var(--primary);
+  border-right: none;
+  box-shadow: 2px 0 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Sidebar section labels */
+.nav-section-label {
+  padding: 20px 20px 8px;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: rgba(255, 255, 255, 0.35);
 }
 
 /* Navigation items */
 .app-sidenav .mat-mdc-nav-list {
-  padding-top: 8px;
+  padding-top: 0;
 }
 
+.app-sidenav .mat-mdc-list-item {
+  color: rgba(255, 255, 255, 0.70);
+  border-radius: var(--radius-sm);
+  margin: 2px 8px;
+  height: 44px;
+  transition: all var(--transition);
+}
+
+.app-sidenav .mat-mdc-list-item:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: #ffffff;
+}
+
+.app-sidenav .mat-mdc-list-item .mat-icon {
+  color: rgba(255, 255, 255, 0.55);
+  transition: color var(--transition);
+}
+
+.app-sidenav .mat-mdc-list-item:hover .mat-icon {
+  color: var(--accent);
+}
+
+/* Item ativo */
 .active-link {
-  background: rgba(25, 118, 210, 0.08);
-  color: var(--primary, #1976d2);
+  background: rgba(245, 166, 35, 0.12);
+  color: #ffffff;
+  position: relative;
+}
+
+.active-link::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 4px;
+  bottom: 4px;
+  width: 3px;
+  background: var(--accent);
+  border-radius: 0 2px 2px 0;
 }
 
 .active-link .mat-icon {
-  color: var(--primary, #1976d2);
+  color: var(--accent);
 }
 
-/* Content area */
+/* ===================== CONTENT ===================== */
 .app-content {
-  background: var(--background, #fafafa);
+  background: var(--background);
   min-height: calc(100vh - 64px);
   overflow-y: auto;
+  padding: 0;
 }
 
-/* User menu header */
+/* ===================== USER MENU ===================== */
 .user-info-menu {
   display: flex;
   align-items: center;
   gap: 12px;
   padding: 16px;
+  background: var(--surface-variant);
+  border-radius: var(--radius-sm);
+  margin: 8px;
 }
 
 .user-info-menu mat-icon {
   font-size: 2.5rem;
   width: 2.5rem;
   height: 2.5rem;
-  color: var(--on-surface-variant, #757575);
+  color: var(--primary);
 }
 
 .user-name {
   font-weight: 600;
   font-size: 0.9375rem;
-  color: var(--on-surface, #212121);
+  color: var(--on-surface);
 }
 
 .user-role {
-  font-size: 0.8125rem;
-  color: var(--on-surface-variant, #757575);
+  font-size: 0.75rem;
+  color: var(--on-surface-variant);
   text-transform: capitalize;
+  margin-top: 2px;
 }
 
-/* Responsive */
+/* ===================== SIDENAV FOOTER ===================== */
+.sidenav-footer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 12px 20px;
+  background: var(--primary-dark);
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.4);
+  text-align: center;
+}
+
+/* ===================== RESPONSIVE ===================== */
 @media (max-width: 599px) {
   .app-sidenav {
     width: 240px;
@@ -87,5 +199,9 @@
 
   .app-title {
     font-size: 1.125rem;
+  }
+
+  .toolbar-search {
+    display: none;
   }
 }

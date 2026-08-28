@@ -3,6 +3,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatButtonModule } from '@angular/material/button';
 import { DashboardService } from '../../core/services/dashboard.service';
 import { PrazoService } from '../../core/services/prazo.service';
 import { DashboardDTO } from '../../core/models/dashboard.model';
@@ -12,7 +13,14 @@ import { DatePipe } from '@angular/common';
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [MatCardModule, MatIconModule, MatTableModule, MatProgressSpinnerModule, DatePipe],
+  imports: [
+    MatCardModule,
+    MatIconModule,
+    MatTableModule,
+    MatProgressSpinnerModule,
+    MatButtonModule,
+    DatePipe,
+  ],
   templateUrl: './dashboard.html',
   styleUrls: ['./dashboard.css'],
 })
@@ -20,89 +28,81 @@ export class Dashboard {
   private readonly dashboardService = inject(DashboardService);
   private readonly prazoService = inject(PrazoService);
 
-  // Estado reativo com signals
-  readonly indicadores = signal<DashboardDTO | null>(null);
+  readonly loading = signal(true);
+  readonly erro = signal('');
+  readonly dados = signal<DashboardDTO | null>(null);
   readonly prazosProximos = signal<Prazo[]>([]);
-  readonly loading = signal<boolean>(true);
-  readonly erro = signal<string>('');
+  readonly colunas = ['descricao', 'vencimento', 'status'];
 
-  // Colunas da tabela
-  readonly colunas = ['descricao', 'processo', 'vencimento', 'status'];
-
-  // Cards derivados dos indicadores
   readonly cards = computed(() => {
-    const dados = this.indicadores();
-    if (!dados) return [];
+    const d = this.dados();
+    if (!d) return [];
     return [
       {
         label: 'Processos Ativos',
-        valor: dados.processosAtivos,
+        valor: d.processosAtivos ?? 0,
         icone: 'gavel',
-        bgColor: 'rgba(25, 118, 210, 0.1)',
-        iconColor: '#1976d2',
-      },
-      {
-        label: 'Prazos Vencidos',
-        valor: dados.prazosVencidos,
-        icone: 'warning',
-        bgColor: 'rgba(211, 47, 47, 0.1)',
-        iconColor: '#d32f2f',
+        corClass: 'blue',
+        trend: undefined as string | undefined,
+        trendDir: undefined as string | undefined,
       },
       {
         label: 'Prazos Abertos',
-        valor: dados.prazosAbertos,
+        valor: d.prazosAbertos ?? 0,
         icone: 'event',
-        bgColor: 'rgba(245, 124, 0, 0.1)',
-        iconColor: '#f57c00',
+        corClass: 'amber',
+        trend: undefined as string | undefined,
+        trendDir: undefined as string | undefined,
       },
       {
-        label: 'Advogados',
-        valor: dados.totalUsuarios,
-        icone: 'people',
-        bgColor: 'rgba(56, 142, 60, 0.1)',
-        iconColor: '#388e3c',
+        label: 'Prazos Vencidos',
+        valor: d.prazosVencidos ?? 0,
+        icone: 'warning',
+        corClass: 'red',
+        trend: undefined as string | undefined,
+        trendDir: undefined as string | undefined,
+      },
+      {
+        label: 'Prazos Cumpridos',
+        valor: d.prazosCumpridos ?? 0,
+        icone: 'check_circle',
+        corClass: 'green',
+        trend: undefined as string | undefined,
+        trendDir: undefined as string | undefined,
       },
     ];
   });
 
   constructor() {
-    this.carregarDados();
+    this.carregar();
   }
 
-  private carregarDados(): void {
+  carregar(): void {
     this.loading.set(true);
     this.erro.set('');
 
-    // Calcula período: hoje + 7 dias
-    const hoje = new Date().toISOString().split('T')[0];
-    const semana = new Date();
-    semana.setDate(semana.getDate() + 7);
-    const fimSemana = semana.toISOString().split('T')[0];
-
-    // Carrega indicadores e prazos em paralelo
     this.dashboardService.obterIndicadores().subscribe({
-      next: (dados) => {
-        this.indicadores.set(dados);
+      next: (data) => {
+        this.dados.set(data);
+        this.loading.set(false);
       },
       error: () => {
-        this.erro.set('Erro ao carregar indicadores.');
+        this.erro.set('Erro ao carregar dados do dashboard.');
         this.loading.set(false);
       },
     });
 
-    this.prazoService.listarPorPeriodo(hoje, fimSemana).subscribe({
-      next: (prazos) => {
-        this.prazosProximos.set(prazos);
-        this.loading.set(false);
-      },
-      error: () => {
-        // Se falhar prazos, ainda mostra indicadores
-        this.loading.set(false);
-      },
+    this.prazoService.listarProximos(7).subscribe({
+      next: (prazos) => this.prazosProximos.set(prazos),
+      error: () => {},
     });
   }
 
-  recarregar(): void {
-    this.carregarDados();
+  diasRestantes(dataVencimento: string): number {
+    const data = new Date(dataVencimento);
+    const hoje = new Date();
+    hoje.setHours(0, 0, 0, 0);
+    const diff = data.getTime() - hoje.getTime();
+    return Math.ceil(diff / (1000 * 60 * 60 * 24));
   }
 }
