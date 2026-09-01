@@ -6,10 +6,18 @@
 
   <mat-dialog-content class="dialog-content">
     <form [formGroup]="form" class="form-grid">
+      <!-- Dados Principais -->
+      <span class="form-section-label">Dados do Processo</span>
+
       <!-- Número CNJ -->
-      <mat-form-field appearance="outline" class="full-width">
+      <mat-form-field appearance="outline" class="full-width" subscriptSizing="dynamic">
         <mat-label>Número CNJ</mat-label>
-        <input matInput formControlName="numeroUnico" placeholder="0000000-00.0000.0.00.0000" maxlength="25" />
+        <input
+          matInput
+          formControlName="numeroUnico"
+          placeholder="0000000-00.0000.0.00.0000"
+          maxlength="25"
+        />
         <mat-icon matSuffix>badge</mat-icon>
         @if (form.get('numeroUnico')?.hasError('required')) {
           <mat-error>Número CNJ é obrigatório</mat-error>
@@ -20,7 +28,7 @@
       </mat-form-field>
 
       <!-- Área + Tribunal -->
-      <mat-form-field appearance="outline" class="half-width">
+      <mat-form-field appearance="outline" class="half-width" subscriptSizing="dynamic">
         <mat-label>Área do Direito</mat-label>
         <mat-select formControlName="areaDireito">
           @for (area of areasDireito; track area) {
@@ -32,7 +40,7 @@
         }
       </mat-form-field>
 
-      <mat-form-field appearance="outline" class="half-width">
+      <mat-form-field appearance="outline" class="half-width" subscriptSizing="dynamic">
         <mat-label>Tribunal</mat-label>
         <mat-select formControlName="tribunal">
           @for (tribunal of tribunais; track tribunal) {
@@ -45,7 +53,7 @@
       </mat-form-field>
 
       <!-- Vara -->
-      <mat-form-field appearance="outline" class="full-width">
+      <mat-form-field appearance="outline" class="full-width" subscriptSizing="dynamic">
         <mat-label>Vara</mat-label>
         <input matInput formControlName="vara" placeholder="Ex: 1ª Vara Cível" />
         @if (form.get('vara')?.hasError('required')) {
@@ -54,66 +62,78 @@
       </mat-form-field>
 
       <!-- Assunto -->
-      <mat-form-field appearance="outline" class="full-width">
+      <mat-form-field appearance="outline" class="full-width" subscriptSizing="dynamic">
         <mat-label>Assunto</mat-label>
         <input matInput formControlName="assunto" placeholder="Ex: Indenização por danos morais" />
       </mat-form-field>
 
+      <!-- Dados Complementares -->
+      <span class="form-section-label">Dados Complementares</span>
+
       <!-- Data + Valor -->
-      <mat-form-field appearance="outline" class="half-width">
+      <mat-form-field appearance="outline" class="half-width" subscriptSizing="dynamic">
         <mat-label>Data Distribuição</mat-label>
         <mat-datepicker-toggle matIconSuffix [for]="datepicker" />
         <mat-datepicker #datepicker />
         <input matInput [matDatepicker]="datepicker" formControlName="dataDistribuicao" />
       </mat-form-field>
 
-      <mat-form-field appearance="outline" class="half-width">
+      <mat-form-field appearance="outline" class="half-width" subscriptSizing="dynamic">
         <mat-label>Valor da Causa (R$)</mat-label>
         <input matInput type="number" formControlName="valorCausa" placeholder="0.00" step="0.01" />
         <mat-icon matSuffix>attach_money</mat-icon>
       </mat-form-field>
 
       <!-- Polo Ativo + Polo Passivo -->
-      <mat-form-field appearance="outline" class="half-width">
+      <mat-form-field appearance="outline" class="half-width" subscriptSizing="dynamic">
         <mat-label>Polo Ativo</mat-label>
         <input matInput formControlName="poloAtivo" placeholder="Autor(es)" />
       </mat-form-field>
 
-      <mat-form-field appearance="outline" class="half-width">
+      <mat-form-field appearance="outline" class="half-width" subscriptSizing="dynamic">
         <mat-label>Polo Passivo</mat-label>
         <input matInput formControlName="poloPassivo" placeholder="Réu(s)" />
       </mat-form-field>
 
-      <!-- Segredo + Responsável -->
+      <!-- Segredo de Justiça -->
       <div class="toggle-row">
-        <mat-slide-toggle formControlName="segredoJustica">
-          Segredo de Justiça
-        </mat-slide-toggle>
+        <div class="toggle-label">
+          <span class="toggle-label-text">Segredo de Justiça</span>
+          <span class="toggle-hint">Marque se o processo é sigiloso</span>
+        </div>
+        <mat-slide-toggle formControlName="segredoJustica"></mat-slide-toggle>
       </div>
-
-      <mat-form-field appearance="outline" class="full-width">
-        <mat-label>Responsável</mat-label>
-        <input matInput formControlName="responsavelId" />
-        <mat-icon matSuffix>person</mat-icon>
-      </mat-form-field>
     </form>
 
     @if (erro()) {
       <div class="dialog-error">
-        <mat-icon color="warn">error_outline</mat-icon>
-        <span>{{ erro() }}</span>
+        <mat-icon>error_outline</mat-icon>
+        {{ erro() }}
       </div>
     }
   </mat-dialog-content>
 
   <mat-dialog-actions class="dialog-actions" align="end">
-    <button mat-stroked-button type="button" (click)="cancelar()" [disabled]="loading()">
+    <button
+      mat-stroked-button
+      type="button"
+      class="cancel-btn"
+      (click)="cancelar()"
+      [disabled]="loading()"
+    >
       Cancelar
     </button>
-    <button mat-raised-button color="primary" type="button" (click)="salvar()" [disabled]="loading()">
+    <button
+      mat-raised-button
+      type="button"
+      class="save-btn"
+      (click)="salvar()"
+      [disabled]="loading() || form.invalid"
+    >
       @if (loading()) {
         <mat-spinner diameter="20"></mat-spinner>
       } @else {
+        <mat-icon style="margin-right: 6px">save</mat-icon>
         Cadastrar
       }
     </button>

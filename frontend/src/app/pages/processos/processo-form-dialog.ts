@@ -11,9 +11,10 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatDialogModule } from '@angular/material/dialog';
 import { ProcessoService } from '../../core/services/processo.service';
 import { ProcessoRequest } from '../../core/models/processo.model';
-import { MatDialogModule } from '@angular/material/dialog';
+import { AuthService } from '../../core/auth/auth.service';
 
 @Component({
   selector: 'app-processo-form-dialog',
@@ -39,11 +40,11 @@ export class ProcessoFormDialog {
   private readonly fb = inject(FormBuilder);
   private readonly processoService = inject(ProcessoService);
   private readonly dialogRef = inject(MatDialogRef<ProcessoFormDialog>);
+  private readonly auth = inject(AuthService);
 
   readonly loading = signal(false);
   readonly erro = signal('');
 
-  // Enums para os selects
   readonly areasDireito = [
     'CIVEL',
     'PENAL',
@@ -121,21 +122,12 @@ export class ProcessoFormDialog {
   });
 
   constructor() {
-    // Recebe o responsavelId injetado via MAT_DIALOG_DATA
     const data = inject(MAT_DIALOG_DATA);
-    this.form.patchValue({ responsavelId: data?.responsavelId ?? '' });
+    const responsavelId = data?.responsavelId ?? this.auth.user()?.['id'] ?? '';
+    this.form.patchValue({ responsavelId });
   }
 
   salvar(): void {
-    console.log('=== SALVAR CHAMADO ===');
-    console.log('Form válido?', this.form.valid);
-    console.log('Valores:', this.form.getRawValue());
-    Object.keys(this.form.controls).forEach((key) => {
-      const c = this.form.get(key);
-      if (c?.invalid) {
-        console.log(`Campo inválido: ${key}`, c.errors);
-      }
-    });
     if (this.form.invalid) {
       this.form.markAllAsTouched();
       return;
@@ -145,6 +137,7 @@ export class ProcessoFormDialog {
     this.erro.set('');
 
     const raw = this.form.getRawValue();
+
     const request: ProcessoRequest = {
       numeroUnico: raw.numeroUnico!,
       areaDireito: raw.areaDireito!,
@@ -162,19 +155,19 @@ export class ProcessoFormDialog {
     };
 
     this.processoService.cadastrar(request).subscribe({
-      next: (processo) => {
+      next: () => {
         this.loading.set(false);
-        this.dialogRef.close(processo);
+        this.dialogRef.close(true);
       },
       error: (err) => {
         this.loading.set(false);
-        const msg = err?.error?.message ?? err?.error ?? 'Erro ao cadastrar processo.';
-        this.erro.set(typeof msg === 'string' ? msg : 'Erro ao cadastrar processo.');
+        const msg = err?.error?.message ?? err?.message ?? 'Erro ao cadastrar processo.';
+        this.erro.set(msg);
       },
     });
   }
 
   cancelar(): void {
-    this.dialogRef.close();
+    this.dialogRef.close(false);
   }
 }
