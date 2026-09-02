@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -20,6 +20,7 @@ import { AuthService } from '../../core/auth/auth.service';
     MatButtonModule,
     MatIconModule,
     MatProgressSpinnerModule,
+    RouterLink,
   ],
   templateUrl: './login.html',
   styleUrls: ['./login.css'],

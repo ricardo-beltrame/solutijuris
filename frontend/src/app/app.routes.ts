@@ -5,6 +5,14 @@ import { authGuard } from './core/auth/auth.guard';
 export const routes: Routes = [
   { path: 'login', loadComponent: () => import('./pages/login/login').then((m) => m.Login) },
   {
+    path: 'recuperar-senha',
+    loadComponent: () => import('./pages/recuperar-senha/recuperar-senha').then((m) => m.RecuperarSenha),
+  },
+  {
+    path: 'redefinir-senha',
+    loadComponent: () => import('./pages/redefinir-senha/redefinir-senha').then((m) => m.RedefinirSenha),
+  },
+  {
     path: '',
     component: MainLayoutComponent,
     canActivate: [authGuard],

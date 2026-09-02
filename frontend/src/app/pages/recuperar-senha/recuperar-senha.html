@@ -1,0 +1,68 @@
+<div class="login-page">
+  <div class="login-background"></div>
+
+  <div class="login-wrapper">
+    <mat-card class="login-card">
+      <div class="login-header">
+        <div class="logo-wrapper">
+          <img src="/assets/favicon.ico" alt="SolutioJuris" class="logo-img" />
+        </div>
+        <h1 class="login-title">Recuperar Senha</h1>
+        <p class="login-subtitle">Digite seu e-mail para receber as instruções</p>
+      </div>
+
+      @if (enviado()) {
+        <div class="success-container">
+          <mat-icon class="success-icon">mark_email_read</mat-icon>
+          <p class="success-text">Se o e-mail estiver cadastrado, você receberá um link de recuperação.</p>
+          <button mat-raised-button color="primary" class="login-button" routerLink="/login">
+            <mat-icon>arrow_back</mat-icon>
+            <span>Voltar para o login</span>
+          </button>
+        </div>
+      } @else {
+        <form [formGroup]="form" (ngSubmit)="enviar()" class="login-form">
+          <div class="form-field-group">
+            <mat-form-field appearance="outline" class="login-field">
+              <mat-label>E-mail</mat-label>
+              <input matInput type="email" formControlName="email" placeholder="voce@escritorio.com" />
+              <mat-icon matPrefix>mail</mat-icon>
+              @if (form.get('email')?.hasError('required')) {
+                <mat-error>E-mail é obrigatório</mat-error>
+              }
+              @if (form.get('email')?.hasError('email')) {
+                <mat-error>E-mail inválido</mat-error>
+              }
+            </mat-form-field>
+          </div>
+
+          @if (erro()) {
+            <div class="login-error">
+              <mat-icon>error_outline</mat-icon>
+              <span>{{ erro() }}</span>
+            </div>
+          }
+
+          <button mat-raised-button color="primary" type="submit" class="login-button"
+                  [disabled]="form.invalid || loading()">
+            @if (loading()) {
+              <mat-spinner diameter="20"></mat-spinner>
+              <span class="btn-loading-text">Enviando...</span>
+            } @else {
+              <mat-icon>send</mat-icon>
+              <span>Enviar link de recuperação</span>
+            }
+          </button>
+        </form>
+      }
+
+      <div class="login-footer">
+        <a routerLink="/login" class="forgot-link">
+          <mat-icon style="font-size: 1rem; vertical-align: middle;">arrow_back</mat-icon>
+          Voltar para o login
+        </a>
+        <span class="copyright">© 2026 SolutioJuris</span>
+      </div>
+    </mat-card>
+  </div>
+</div>

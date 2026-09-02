@@ -1,0 +1,88 @@
+<div class="login-page">
+  <div class="login-background"></div>
+
+  <div class="login-wrapper">
+    <mat-card class="login-card">
+      <div class="login-header">
+        <div class="logo-wrapper">
+          <img src="/assets/favicon.ico" alt="SolutioJuris" class="logo-img" />
+        </div>
+        <h1 class="login-title">Redefinir Senha</h1>
+        <p class="login-subtitle">Digite sua nova senha</p>
+      </div>
+
+      @if (sucesso()) {
+        <div class="success-container">
+          <mat-icon class="success-icon">check_circle</mat-icon>
+          <p class="success-text">Senha redefinida com sucesso!</p>
+          <p class="success-subtext">Redirecionando para o login...</p>
+        </div>
+      } @else {
+        <form [formGroup]="form" (ngSubmit)="redefinir()" class="login-form">
+          @if (erro()) {
+            <div class="login-error">
+              <mat-icon>error_outline</mat-icon>
+              <span>{{ erro() }}</span>
+            </div>
+          }
+
+          @if (token()) {
+            <div class="form-field-group">
+              <mat-form-field appearance="outline" class="login-field">
+                <mat-label>Nova senha</mat-label>
+                <input matInput [type]="hideSenha ? 'password' : 'text'" formControlName="novaSenha" />
+                <mat-icon matPrefix>lock</mat-icon>
+                <button mat-icon-button matSuffix type="button" (click)="hideSenha = !hideSenha">
+                  <mat-icon>{{ hideSenha ? 'visibility_off' : 'visibility' }}</mat-icon>
+                </button>
+                @if (form.get('novaSenha')?.hasError('required')) {
+                  <mat-error>Senha é obrigatória</mat-error>
+                }
+                @if (form.get('novaSenha')?.hasError('minlength')) {
+                  <mat-error>Mínimo 6 caracteres</mat-error>
+                }
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" class="login-field">
+                <mat-label>Confirmar senha</mat-label>
+                <input matInput [type]="hideSenha ? 'password' : 'text'" formControlName="confirmarSenha" />
+                <mat-icon matPrefix>lock</mat-icon>
+                @if (form.get('confirmarSenha')?.hasError('required')) {
+                  <mat-error>Confirmação é obrigatória</mat-error>
+                }
+              </mat-form-field>
+            </div>
+
+            <button mat-raised-button color="primary" type="submit" class="login-button"
+                    [disabled]="form.invalid || loading()">
+              @if (loading()) {
+                <mat-spinner diameter="20"></mat-spinner>
+                <span class="btn-loading-text">Redefinindo...</span>
+              } @else {
+                <mat-icon>lock_reset</mat-icon>
+                <span>Redefinir senha</span>
+              }
+            </button>
+          } @else {
+            <div class="success-container">
+              <mat-icon class="success-icon" style="color: #d32f2f;">link_off</mat-icon>
+              <p class="success-text">Token não encontrado ou inválido.</p>
+              <a mat-raised-button color="primary" class="login-button" routerLink="/recuperar-senha">
+                <mat-icon>refresh</mat-icon>
+                <span>Solicitar nova recuperação</span>
+              </a>
+            </div>
+          }
+        </form>
+      }
+
+      <div class="login-footer">
+        <a routerLink="/login" class="forgot-link">
+          <mat-icon style="font-size: 1rem; vertical-align: middle;">arrow_back</mat-icon>
+          Voltar para o login
+        </a>
+        <span class="copyright">© 2026 SolutioJuris</span>
+      </div>
+    </mat-card>
+  </div>
+</div>

@@ -60,4 +60,12 @@ export class AuthService {
   private getStoredToken(): string | null {
     return localStorage.getItem(this.TOKEN_KEY);
   }
+
+  solicitarRecuperacao(email: string): Observable<any> {
+    return this.http.post('/api/auth/recuperar-senha', { email });
+  }
+
+  redefinirSenha(token: string, novaSenha: string): Observable<any> {
+    return this.http.post('/api/auth/redefinir-senha', { token, novaSenha });
+  }
 }
