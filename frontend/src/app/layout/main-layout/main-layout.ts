@@ -40,6 +40,8 @@ export class MainLayoutComponent {
 
   readonly isDark = signal(false);
   readonly isMobile = signal(false);
+  readonly userFoto = signal<string | null>(null);
+  readonly showModalFoto = signal(false);
 
   readonly navItems = [
     { path: '/dashboard', label: 'Dashboard', icon: 'dashboard' },
@@ -79,5 +81,29 @@ export class MainLayoutComponent {
 
   logout(): void {
     this.auth.logout();
+  }
+
+  abrirModalFoto(): void {
+    this.showModalFoto.set(true);
+  }
+
+  fecharModalFoto(): void {
+    this.showModalFoto.set(false);
+  }
+
+  onFotoSelecionada(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files[0]) {
+      const file = input.files[0];
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.userFoto.set(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+
+  removerFoto(): void {
+    this.userFoto.set(null);
   }
 }

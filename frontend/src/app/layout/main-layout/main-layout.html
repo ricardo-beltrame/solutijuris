@@ -4,34 +4,55 @@
   </button>
 
   <span class="app-title">
-    <mat-icon class="logo-icon">balance</mat-icon>
+    <img src="/assets/favicon.png" alt="SolutiJuris" class="logo-icon" />
     SolutiJuris
   </span>
 
   <span class="spacer"></span>
 
   @if (!isMobile()) {
-    <mat-form-field appearance="outline" class="toolbar-search" subscriptSizing="dynamic">
-      <mat-label>Buscar processo, prazo...</mat-label>
-      <input matInput />
-      <mat-icon matPrefix>search</mat-icon>
-    </mat-form-field>
-    <span class="spacer"></span>
+    <div class="toolbar-search-wrapper">
+      <mat-icon class="search-icon">search</mat-icon>
+      <input
+        type="text"
+        class="toolbar-search-input"
+        placeholder="Buscar processo, prazo..."
+      />
+    </div>
   }
 
-  <button mat-icon-button [matMenuTriggerFor]="userMenu" aria-label="Usuário" [matTooltip]="userNome">
-    <div class="user-avatar">{{ iniciais }}</div>
+  <button mat-button class="user-btn" [matMenuTriggerFor]="userMenu">
+    <div class="user-avatar">
+      @if (userFoto()) {
+        <img [src]="userFoto()" alt="Foto" class="user-avatar-img" />
+      } @else {
+        {{ iniciais }}
+      }
+    </div>
+    <span class="user-btn-name">{{ userNome }}</span>
+    <mat-icon class="user-btn-arrow">expand_more</mat-icon>
   </button>
 
-  <mat-menu #userMenu="matMenu">
-    <div class="user-info-menu">
-      <mat-icon>person</mat-icon>
-      <div>
+  <mat-menu #userMenu="matMenu" class="user-menu-panel" xPosition="before">
+    <div class="user-info-menu" (click)="abrirModalFoto()" style="cursor: pointer;">
+      <div class="user-avatar-large">
+        @if (userFoto()) {
+          <img [src]="userFoto()" alt="Foto" class="user-avatar-large-img" />
+        } @else {
+          <mat-icon>person</mat-icon>
+        }
+      </div>
+      <div class="user-info-text">
         <div class="user-name">{{ userNome }}</div>
         <div class="user-role">{{ userRole }}</div>
+        <div class="user-edit-hint">Clique para alterar foto</div>
       </div>
     </div>
     <mat-divider></mat-divider>
+    <button mat-menu-item (click)="abrirModalFoto()">
+      <mat-icon>photo_camera</mat-icon>
+      <span>Alterar foto</span>
+    </button>
     <button mat-menu-item (click)="toggleTheme()">
       <mat-icon>{{ isDark() ? 'light_mode' : 'dark_mode' }}</mat-icon>
       <span>{{ isDark() ? 'Tema claro' : 'Tema escuro' }}</span>
@@ -79,4 +100,36 @@
       <router-outlet />
     </div>
   </mat-sidenav-content>
+
+  @if (showModalFoto()) {
+    <div class="foto-modal-overlay" (click)="fecharModalFoto()">
+      <div class="foto-modal" (click)="$event.stopPropagation()">
+        <h3 class="foto-modal-title">Alterar foto de perfil</h3>
+        <div class="foto-modal-preview">
+          @if (userFoto()) {
+            <img [src]="userFoto()" alt="Preview" class="foto-preview-img" />
+          } @else {
+            <div class="foto-preview-placeholder">
+              <mat-icon>person</mat-icon>
+              <span>{{ iniciais }}</span>
+            </div>
+          }
+        </div>
+        <label class="foto-upload-btn">
+          <input type="file" accept="image/*" (change)="onFotoSelecionada($event)" hidden />
+          <mat-icon>upload</mat-icon>
+          <span>Escolher imagem</span>
+        </label>
+        @if (userFoto()) {
+          <button mat-stroked-button class="foto-remove-btn" (click)="removerFoto()">
+            <mat-icon>delete</mat-icon>
+            Remover foto
+          </button>
+        }
+        <button mat-raised-button class="foto-close-btn" (click)="fecharModalFoto()">
+          Concluir
+        </button>
+      </div>
+    </div>
+  }
 </mat-sidenav-container>
