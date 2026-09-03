@@ -37,6 +37,18 @@ class AuthControllerTest {
 
     @MockBean
     private JwtProvider jwtProvider;
+    @MockBean
+    private SenhaResetTokenRepository senhaResetTokenRepository;
+
+    @MockBean
+    private EmailService emailService;
+
+    @MockBean
+    private PasswordEncoder passwordEncoder;
+
+    @MockBean
+    private UsuarioRepository usuarioRepository;
+
 
     @Test
     @DisplayName("POST /auth/register - deve retornar 201")
