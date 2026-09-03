@@ -18,6 +18,8 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import com.solutijuris.service.EmailService;
 import com.solutijuris.repository.SenhaResetTokenRepository;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import com.solutijuris.repository.UsuarioRepository;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
