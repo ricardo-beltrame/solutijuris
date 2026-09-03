@@ -18,6 +18,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import java.time.LocalDateTime;
 import com.solutijuris.dto.MensagemResponse;
 import com.solutijuris.repository.UsuarioRepository;
+import org.springframework.transaction.annotation.Transactional;
 
 @RestController
 @RequestMapping("/auth")
@@ -44,6 +45,7 @@ public class AuthController {
     }
 
     @PostMapping("/recuperar-senha")
+    @Transactional
     public ResponseEntity<MensagemResponse> recuperarSenha(@Valid @RequestBody RecuperarSenhaRequest request) {
         var usuario = usuarioRepository.findByEmail(request.getEmail());
 
@@ -65,6 +67,7 @@ public class AuthController {
     }
 
     @PostMapping("/redefinir-senha")
+    @Transactional
     public ResponseEntity<MensagemResponse> redefinirSenha(@Valid @RequestBody RedefinirSenhaRequest request) {
         var tokenOpt = tokenRepository.findByToken(request.getToken());
 
