@@ -41,8 +41,15 @@ export class AuthService {
 
   private setSession(res: AuthResponse): void {
     localStorage.setItem(this.TOKEN_KEY, res.token);
-    localStorage.setItem(this.USER_KEY, JSON.stringify(res.user));
-    this.user.set(res.user);
+
+    const user: User = {
+      nome: res.nome,
+      email: res.email,
+      role: res.perfil,
+    };
+
+    localStorage.setItem(this.USER_KEY, JSON.stringify(user));
+    this.user.set(user);
     this.isAuthenticated.set(true);
   }
 

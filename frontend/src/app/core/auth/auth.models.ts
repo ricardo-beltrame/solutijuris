@@ -1,5 +1,4 @@
 export interface User {
-  id: string;
   nome: string;
   email: string;
   role: string;
@@ -7,7 +6,9 @@ export interface User {
 
 export interface AuthResponse {
   token: string;
-  user: User;
+  nome: string;
+  email: string;
+  perfil: string;
 }
 
 export interface LoginRequest {
