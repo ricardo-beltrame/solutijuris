@@ -21,7 +21,7 @@
     </div>
   }
 
-  <button mat-button class="user-btn" [matMenuTriggerFor]="userMenu">
+  <button mat-icon-button class="user-btn" [matMenuTriggerFor]="userMenu" [matTooltip]="userNome">
     <div class="user-avatar">
       @if (userFoto()) {
         <img [src]="userFoto()" alt="Foto" class="user-avatar-img" />
@@ -29,19 +29,10 @@
         {{ iniciais }}
       }
     </div>
-    <span class="user-btn-name">{{ userNome }}</span>
-    <mat-icon class="user-btn-arrow">expand_more</mat-icon>
   </button>
 
   <mat-menu #userMenu="matMenu" class="user-menu-panel" xPosition="before">
     <div class="user-info-menu" (click)="abrirModalFoto()" style="cursor: pointer;">
-      <div class="user-avatar-large">
-        @if (userFoto()) {
-          <img [src]="userFoto()" alt="Foto" class="user-avatar-large-img" />
-        } @else {
-          <mat-icon>person</mat-icon>
-        }
-      </div>
       <div class="user-info-text">
         <div class="user-name">{{ userNome }}</div>
         <div class="user-role">{{ userRole }}</div>
@@ -49,10 +40,7 @@
       </div>
     </div>
     <mat-divider></mat-divider>
-    <button mat-menu-item (click)="abrirModalFoto()">
-      <mat-icon>photo_camera</mat-icon>
-      <span>Alterar foto</span>
-    </button>
+    <!-- REMOVIDO o botão "Alterar foto" com photo_camera -->
     <button mat-menu-item (click)="toggleTheme()">
       <mat-icon>{{ isDark() ? 'light_mode' : 'dark_mode' }}</mat-icon>
       <span>{{ isDark() ? 'Tema claro' : 'Tema escuro' }}</span>

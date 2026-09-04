@@ -267,3 +267,7 @@
 .table-card .mat-mdc-card-content {
   padding: 0;
 }
+
+.mat-mdc-menu-content {
+  background: var(--surface) !important;
+}
