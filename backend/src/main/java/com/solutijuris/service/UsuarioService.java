@@ -47,7 +47,8 @@ public class UsuarioService {
                 usuario.getEmail(), usuario.getPerfil());
 
         return new AuthResponse(token, usuario.getNomeCompleto(),
-                usuario.getEmail(), usuario.getPerfil().name());
+                usuario.getEmail(), usuario.getPerfil().name(),
+                usuario.getFotoUrl());
     }
 
     @Transactional
@@ -95,7 +96,8 @@ public class UsuarioService {
                 usuario.getEmail(), usuario.getPerfil());
 
         return new AuthResponse(token, usuario.getNomeCompleto(),
-                usuario.getEmail(), usuario.getPerfil().name());
+                usuario.getEmail(), usuario.getPerfil().name(),
+                usuario.getFotoUrl());
     }
 
     private void registrarLog(String usuarioEmail, String acao,

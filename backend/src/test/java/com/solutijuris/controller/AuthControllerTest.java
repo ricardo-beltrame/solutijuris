@@ -58,7 +58,7 @@ class AuthControllerTest {
     @DisplayName("POST /auth/register - deve retornar 201")
     void deveRegistrarUsuario() throws Exception {
         var request = new RegisterRequest("Admin", "admin@teste.com", "123456", PerfilUsuario.ADMIN);
-        var response = new AuthResponse("token123", "Admin", "admin@teste.com", "ADMIN");
+        var response = new AuthResponse("token123", "Admin", "admin@teste.com", "ADMIN", null);
 
         when(usuarioService.cadastrar(any(RegisterRequest.class))).thenReturn(response);
 
@@ -74,7 +74,7 @@ class AuthControllerTest {
     @DisplayName("POST /auth/login - deve retornar 200")
     void deveAutenticarUsuario() throws Exception {
         var request = new LoginRequest("admin@teste.com", "123456");
-        var response = new AuthResponse("token123", "Admin", "admin@teste.com", "ADMIN");
+        var response = new AuthResponse("token123", "Admin", "admin@teste.com", "ADMIN", null);
 
         when(usuarioService.autenticar(any(LoginRequest.class))).thenReturn(response);
 

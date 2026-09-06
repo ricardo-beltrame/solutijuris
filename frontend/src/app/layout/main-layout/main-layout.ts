@@ -12,6 +12,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { AuthService } from '../../core/auth/auth.service';
+import { FotoService } from '../../core/services/foto.service';
 
 @Component({
   selector: 'app-main-layout',
@@ -37,6 +38,7 @@ import { AuthService } from '../../core/auth/auth.service';
 export class MainLayoutComponent {
   private readonly auth = inject(AuthService);
   private readonly breakpoints = inject(BreakpointObserver);
+  private readonly fotoService = inject(FotoService);
 
   readonly isDark = signal(false);
   readonly isMobile = signal(false);
@@ -53,6 +55,16 @@ export class MainLayoutComponent {
     this.breakpoints.observe([Breakpoints.Handset]).subscribe({
       next: (result) => {
         this.isMobile.set(result.matches);
+      },
+    });
+    this.fotoService.getFoto().subscribe({
+      next: (res) => {
+        if (res.fotoUrl) this.userFoto.set(res.fotoUrl);
+      },
+      error: () => {
+        // 401 silencioso — usa fotoUrl do User se existir
+        const fotoFromUser = this.auth.user()?.fotoUrl;
+        if (fotoFromUser) this.userFoto.set(fotoFromUser);
       },
     });
   }
@@ -98,18 +110,27 @@ export class MainLayoutComponent {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files[0]) {
       const file = input.files[0];
-      const reader = new FileReader();
-      reader.onload = () => {
-        const foto = reader.result as string;
-        this.userFoto.set(foto);
-        localStorage.setItem('solutijuris_foto', foto);
-      };
-      reader.readAsDataURL(file);
+      this.fotoService.uploadFoto(file).subscribe({
+        next: (res) => {
+          this.userFoto.set(res.fotoUrl);
+          this.fecharModalFoto();
+        },
+        error: (err) => {
+          console.error('Erro ao uploadar foto:', err);
+        },
+      });
     }
   }
 
+  // Substitui removerFoto:
   removerFoto(): void {
-    this.userFoto.set(null);
-    localStorage.removeItem('solutijuris_foto');
+    this.fotoService.removerFoto().subscribe({
+      next: () => {
+        this.userFoto.set(null);
+      },
+      error: (err) => {
+        console.error('Erro ao remover foto:', err);
+      },
+    });
   }
 }

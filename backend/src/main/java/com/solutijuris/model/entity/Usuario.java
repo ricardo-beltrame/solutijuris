@@ -37,4 +37,7 @@ public class Usuario extends BaseEntity {
 
     @Column(name = "ultimo_login")
     private LocalDateTime ultimoLogin;
+
+    @Column(name = "foto_url", length = 500)
+    private String fotoUrl;
 }
