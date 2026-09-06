@@ -1,5 +1,5 @@
 <mat-toolbar class="app-toolbar">
-  <button mat-icon-button (click)="sidenav.toggle()" aria-label="Menu" matTooltip="Menu">
+  <button mat-icon-button (click)="sidenav.toggle()" aria-label="Menu">
     <mat-icon>menu</mat-icon>
   </button>
 
@@ -40,7 +40,6 @@
       </div>
     </div>
     <mat-divider></mat-divider>
-    <!-- REMOVIDO o botão "Alterar foto" com photo_camera -->
     <button mat-menu-item (click)="toggleTheme()">
       <mat-icon>{{ isDark() ? 'light_mode' : 'dark_mode' }}</mat-icon>
       <span>{{ isDark() ? 'Tema claro' : 'Tema escuro' }}</span>

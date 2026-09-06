@@ -40,7 +40,7 @@ export class MainLayoutComponent {
 
   readonly isDark = signal(false);
   readonly isMobile = signal(false);
-  readonly userFoto = signal<string | null>(null);
+  readonly userFoto = signal<string | null>(this.getStoredFoto());
   readonly showModalFoto = signal(false);
 
   readonly navItems = [
@@ -82,6 +82,9 @@ export class MainLayoutComponent {
   logout(): void {
     this.auth.logout();
   }
+  private getStoredFoto(): string | null {
+    return localStorage.getItem('solutijuris_foto');
+  }
 
   abrirModalFoto(): void {
     this.showModalFoto.set(true);
@@ -97,7 +100,9 @@ export class MainLayoutComponent {
       const file = input.files[0];
       const reader = new FileReader();
       reader.onload = () => {
-        this.userFoto.set(reader.result as string);
+        const foto = reader.result as string;
+        this.userFoto.set(foto);
+        localStorage.setItem('solutijuris_foto', foto);
       };
       reader.readAsDataURL(file);
     }
@@ -105,5 +110,6 @@ export class MainLayoutComponent {
 
   removerFoto(): void {
     this.userFoto.set(null);
+    localStorage.removeItem('solutijuris_foto');
   }
 }

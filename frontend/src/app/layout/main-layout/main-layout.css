@@ -190,9 +190,15 @@
   align-items: center;
   gap: 12px;
   padding: 16px;
-  background: var(--surface-variant);
+  background: rgba(25, 118, 210, 0.08);
   border-radius: var(--radius-sm);
   margin: 8px;
+  transition: background 0.2s ease;
+}
+
+.user-info-menu:hover {
+  background: rgba(25, 118, 210, 0.14);
+  filter: none;
 }
 
 .user-info-menu mat-icon {
@@ -242,7 +248,6 @@
     display: none;
   }
 }
-/* ===================== USER BUTTON ===================== */
 /* ===================== USER BUTTON ===================== */
 .user-btn {
   display: flex;
@@ -298,22 +303,6 @@
 }
 
 /* ===================== USER MENU PANEL ===================== */
-.user-info-menu {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 16px;
-  background: var(--surface-variant);
-  border-radius: var(--radius-sm);
-  margin: 8px;
-  transition: background 0.2s ease;
-}
-
-.user-info-menu:hover {
-  background: var(--surface-variant);
-  filter: brightness(0.97);
-}
-
 .user-avatar-large {
   width: 48px;
   height: 48px;
@@ -481,3 +470,71 @@
   to { opacity: 1; transform: translateY(0); }
 }
 
+/* ===================== USER MENU PANEL — FUNDO AZUL ===================== */
+.user-menu-panel .mat-mdc-menu-content {
+  background: var(--primary);
+  border-radius: var(--radius);
+  padding: 8px;
+  overflow: hidden;
+}
+
+.user-menu-panel .mat-mdc-menu-item {
+  color: rgba(255, 255, 255, 0.85);
+  border-radius: var(--radius-sm);
+  margin: 2px 0;
+}
+
+.user-menu-panel .mat-mdc-menu-item:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.user-menu-panel .mat-mdc-menu-item .mat-icon {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.user-menu-panel .mat-mdc-menu-item:hover .mat-icon {
+  color: #ffffff;
+}
+
+.user-menu-panel .mat-divider {
+  border-color: rgba(255, 255, 255, 0.15);
+  margin: 6px 8px;
+}
+
+/* Header do menu dentro do painel azul */
+.user-menu-panel .user-info-menu {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-sm);
+  margin: 4px 4px 8px;
+  transition: background 0.2s ease;
+}
+
+.user-menu-panel .user-info-menu:hover {
+  background: rgba(255, 255, 255, 0.14);
+  filter: none;
+}
+
+.user-menu-panel .user-name {
+  color: #ffffff;
+}
+
+.user-menu-panel .user-role {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.user-menu-panel .user-edit-hint {
+  color: var(--accent);
+}
+
+.user-menu-panel .user-avatar-large {
+  background: rgba(255, 255, 255, 0.15);
+  color: #ffffff;
+}
+
+.user-menu-panel .user-avatar-large mat-icon {
+  color: rgba(255, 255, 255, 0.8);
+}
