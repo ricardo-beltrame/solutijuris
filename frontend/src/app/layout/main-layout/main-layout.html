@@ -32,13 +32,13 @@
   </button>
 
   <mat-menu #userMenu="matMenu" class="user-menu-panel" xPosition="before">
-    <div class="user-info-menu" (click)="abrirModalFoto()" style="cursor: pointer;">
-      <div class="user-info-text">
-        <div class="user-name">{{ userNome }}</div>
-        <div class="user-role">{{ userRole }}</div>
-        <div class="user-edit-hint">Clique para alterar foto</div>
-      </div>
-    </div>
+    <button mat-menu-item (click)="abrirModalFoto()" class="user-info-menu-btn">
+    <span class="user-info-text">
+      <span class="user-name">{{ userNome }}</span>
+      <span class="user-role">{{ userRole }}</span>
+      <span class="user-edit-hint">Clique para alterar foto</span>
+    </span>
+    </button>
     <mat-divider></mat-divider>
     <button mat-menu-item (click)="toggleTheme()">
       <mat-icon>{{ isDark() ? 'light_mode' : 'dark_mode' }}</mat-icon>
@@ -92,8 +92,11 @@
     <div class="foto-modal-overlay" (click)="fecharModalFoto()">
       <div class="foto-modal" (click)="$event.stopPropagation()">
         <h3 class="foto-modal-title">Alterar foto de perfil</h3>
+
         <div class="foto-modal-preview">
-          @if (userFoto()) {
+          @if (uploading()) {
+            <mat-spinner diameter="40"></mat-spinner>
+          } @else if (userFoto()) {
             <img [src]="userFoto()" alt="Preview" class="foto-preview-img" />
           } @else {
             <div class="foto-preview-placeholder">
@@ -102,17 +105,22 @@
             </div>
           }
         </div>
-        <label class="foto-upload-btn">
-          <input type="file" accept="image/*" (change)="onFotoSelecionada($event)" hidden />
-          <mat-icon>upload</mat-icon>
-          <span>Escolher imagem</span>
-        </label>
-        @if (userFoto()) {
-          <button mat-stroked-button class="foto-remove-btn" (click)="removerFoto()">
-            <mat-icon>delete</mat-icon>
-            Remover foto
-          </button>
+
+        @if (!uploading()) {
+          <label class="foto-upload-btn">
+            <input type="file" accept="image/*" (change)="onFotoSelecionada($event)" hidden />
+            <mat-icon>upload</mat-icon>
+            <span>Escolher imagem</span>
+          </label>
+
+          @if (userFoto()) {
+            <button mat-stroked-button class="foto-remove-btn" (click)="removerFoto()">
+              <mat-icon>delete</mat-icon>
+              Remover foto
+            </button>
+          }
         }
+
         <button mat-raised-button class="foto-close-btn" (click)="fecharModalFoto()">
           Concluir
         </button>

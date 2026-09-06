@@ -1,5 +1,5 @@
-import { Component, inject, signal, computed } from '@angular/core';
-import { RouterOutlet, RouterLink, RouterLinkActive, Router } from '@angular/router';
+import { Component, inject, signal } from '@angular/core';
+import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list';
@@ -10,6 +10,7 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { AuthService } from '../../core/auth/auth.service';
 import { FotoService } from '../../core/services/foto.service';
@@ -31,6 +32,7 @@ import { FotoService } from '../../core/services/foto.service';
     MatTooltipModule,
     MatFormFieldModule,
     MatInputModule,
+    MatProgressSpinnerModule,
   ],
   templateUrl: './main-layout.html',
   styleUrls: ['./main-layout.css'],
@@ -42,8 +44,9 @@ export class MainLayoutComponent {
 
   readonly isDark = signal(false);
   readonly isMobile = signal(false);
-  readonly userFoto = signal<string | null>(this.getStoredFoto());
+  readonly userFoto = signal<string | null>(null);
   readonly showModalFoto = signal(false);
+  readonly uploading = signal(false);
 
   readonly navItems = [
     { path: '/dashboard', label: 'Dashboard', icon: 'dashboard' },
@@ -57,12 +60,14 @@ export class MainLayoutComponent {
         this.isMobile.set(result.matches);
       },
     });
+
+    // Carrega foto do backend ao iniciar
     this.fotoService.getFoto().subscribe({
       next: (res) => {
         if (res.fotoUrl) this.userFoto.set(res.fotoUrl);
       },
       error: () => {
-        // 401 silencioso — usa fotoUrl do User se existir
+        // Tenta pegar do User do AuthService
         const fotoFromUser = this.auth.user()?.fotoUrl;
         if (fotoFromUser) this.userFoto.set(fotoFromUser);
       },
@@ -94,12 +99,11 @@ export class MainLayoutComponent {
   logout(): void {
     this.auth.logout();
   }
-  private getStoredFoto(): string | null {
-    return localStorage.getItem('solutijuris_foto');
-  }
 
   abrirModalFoto(): void {
-    this.showModalFoto.set(true);
+    setTimeout(() => {
+      this.showModalFoto.set(true);
+    });
   }
 
   fecharModalFoto(): void {
@@ -110,19 +114,21 @@ export class MainLayoutComponent {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files[0]) {
       const file = input.files[0];
+      this.uploading.set(true);
+
       this.fotoService.uploadFoto(file).subscribe({
         next: (res) => {
           this.userFoto.set(res.fotoUrl);
-          this.fecharModalFoto();
+          this.uploading.set(false);
         },
         error: (err) => {
-          console.error('Erro ao uploadar foto:', err);
+          console.error('Erro ao enviar foto:', err);
+          this.uploading.set(false);
         },
       });
     }
   }
 
-  // Substitui removerFoto:
   removerFoto(): void {
     this.fotoService.removerFoto().subscribe({
       next: () => {
