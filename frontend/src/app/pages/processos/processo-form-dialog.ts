@@ -123,7 +123,7 @@ export class ProcessoFormDialog {
 
   constructor() {
     const data = inject(MAT_DIALOG_DATA);
-    const responsavelId = data?.responsavelId ?? this.auth.user()?.['id'] ?? '';
+    const responsavelId = data?.responsavelId ?? '';
     this.form.patchValue({ responsavelId });
   }
 

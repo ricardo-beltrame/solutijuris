@@ -59,8 +59,10 @@
                 <mat-spinner diameter="20"></mat-spinner>
                 <span class="btn-loading-text">Redefinindo...</span>
               } @else {
-                <mat-icon>lock_reset</mat-icon>
-                <span>Redefinir senha</span>
+                <ng-container>
+                  <mat-icon>lock_reset</mat-icon>
+                  <span>Redefinir senha</span>
+                </ng-container>
               }
             </button>
           } @else {

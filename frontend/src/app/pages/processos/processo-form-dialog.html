@@ -133,8 +133,10 @@
       @if (loading()) {
         <mat-spinner diameter="20"></mat-spinner>
       } @else {
-        <mat-icon style="margin-right: 6px">save</mat-icon>
-        Cadastrar
+        <ng-container>
+          <mat-icon style="margin-right: 6px">save</mat-icon>
+          Cadastrar
+        </ng-container>
       }
     </button>
   </mat-dialog-actions>

@@ -56,8 +56,10 @@
             <mat-spinner diameter="20"></mat-spinner>
             <span class="btn-loading-text">Entrando...</span>
           } @else {
-            <mat-icon>login</mat-icon>
-            <span>Entrar</span>
+            <ng-container>
+              <mat-icon>login</mat-icon>
+              Entrar
+            </ng-container>
           }
         </button>
       </form>

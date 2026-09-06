@@ -49,8 +49,10 @@
               <mat-spinner diameter="20"></mat-spinner>
               <span class="btn-loading-text">Enviando...</span>
             } @else {
-              <mat-icon>send</mat-icon>
-              <span>Enviar link de recuperação</span>
+              <ng-container>
+                <mat-icon>send</mat-icon>
+                <span>Enviar link de recuperação</span>
+              </ng-container>
             }
           </button>
         </form>
