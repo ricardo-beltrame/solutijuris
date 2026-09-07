@@ -8,8 +8,6 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { AuthService } from '../../core/auth/auth.service';
@@ -30,8 +28,6 @@ import { FotoService } from '../../core/services/foto.service';
     MatMenuModule,
     MatDividerModule,
     MatTooltipModule,
-    MatFormFieldModule,
-    MatInputModule,
     MatProgressSpinnerModule,
   ],
   templateUrl: './main-layout.html',
@@ -47,6 +43,7 @@ export class MainLayoutComponent {
   readonly userFoto = signal<string | null>(null);
   readonly showModalFoto = signal(false);
   readonly uploading = signal(false);
+  private pendingAction: string | null = null;
 
   readonly navItems = [
     { path: '/dashboard', label: 'Dashboard', icon: 'dashboard' },
@@ -56,18 +53,14 @@ export class MainLayoutComponent {
 
   constructor() {
     this.breakpoints.observe([Breakpoints.Handset]).subscribe({
-      next: (result) => {
-        this.isMobile.set(result.matches);
-      },
+      next: (result) => this.isMobile.set(result.matches),
     });
 
-    // Carrega foto do backend ao iniciar
     this.fotoService.getFoto().subscribe({
       next: (res) => {
         if (res.fotoUrl) this.userFoto.set(res.fotoUrl);
       },
       error: () => {
-        // Tenta pegar do User do AuthService
         const fotoFromUser = this.auth.user()?.fotoUrl;
         if (fotoFromUser) this.userFoto.set(fotoFromUser);
       },
@@ -77,11 +70,9 @@ export class MainLayoutComponent {
   get userNome(): string {
     return this.auth.user()?.nome ?? 'Usuário';
   }
-
   get userRole(): string {
     return this.auth.user()?.role ?? '';
   }
-
   get iniciais(): string {
     const nome = this.userNome.trim();
     if (!nome) return '?';
@@ -100,10 +91,19 @@ export class MainLayoutComponent {
     this.auth.logout();
   }
 
+  // Marca a ação pendente — o menu fecha e disporta onMenuClosed()
   abrirModalFoto(): void {
     setTimeout(() => {
       this.showModalFoto.set(true);
-    });
+    }, 100);
+  }
+
+  // Executado pelo evento (closed) do mat-menu
+  onMenuClosed(): void {
+    if (this.pendingAction === 'abrirModal') {
+      this.showModalFoto.set(true);
+    }
+    this.pendingAction = null;
   }
 
   fecharModalFoto(): void {
@@ -115,7 +115,6 @@ export class MainLayoutComponent {
     if (input.files && input.files[0]) {
       const file = input.files[0];
       this.uploading.set(true);
-
       this.fotoService.uploadFoto(file).subscribe({
         next: (res) => {
           this.userFoto.set(res.fotoUrl);
@@ -131,12 +130,8 @@ export class MainLayoutComponent {
 
   removerFoto(): void {
     this.fotoService.removerFoto().subscribe({
-      next: () => {
-        this.userFoto.set(null);
-      },
-      error: (err) => {
-        console.error('Erro ao remover foto:', err);
-      },
+      next: () => this.userFoto.set(null),
+      error: (err) => console.error('Erro ao remover foto:', err),
     });
   }
 }

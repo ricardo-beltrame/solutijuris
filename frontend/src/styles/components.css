@@ -342,3 +342,27 @@
   overflow: hidden;
 
 }
+
+.user-menu-panel .user-info-menu-btn .user-name {
+  display: block;
+  color: #ffffff;
+  font-weight: 600;
+  font-size: 0.9375rem;
+  line-height: 1.4;
+}
+
+.user-menu-panel .user-info-menu-btn .user-role {
+  display: block;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.75rem;
+  text-transform: capitalize;
+  line-height: 1.4;
+}
+
+.user-menu-panel .user-info-menu-btn .user-edit-hint {
+  display: block;
+  color: var(--gray-700);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  margin-top: 4px;
+}
