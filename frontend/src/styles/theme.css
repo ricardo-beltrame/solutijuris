@@ -1,8 +1,8 @@
 :root {
   /* === MARCA === */
-  --primary: #4682B4;
+  --primary: #2c5471;
   --primary-light: #1976D2;
-  --primary-dark: #0D47A1;
+  --primary-dark: #445469;
   --accent: #f5a623;
   --accent-light: #ffd089;
   --accent-dark: #d4881a;
@@ -60,7 +60,7 @@
 html[data-theme="dark"] {
   --primary: #2d3a4f;
   --primary-light: #3d4d68;
-  --primary-dark: #1a2332;
+  --primary-dark: #294065;
   --accent: #f5a623;
   --surface: #1a1f2e;
   --background: #0f1420;
