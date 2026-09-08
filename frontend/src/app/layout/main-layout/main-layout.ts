@@ -8,10 +8,13 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { AuthService } from '../../core/auth/auth.service';
 import { FotoService } from '../../core/services/foto.service';
+import { PerfilUpdate } from '../../core/auth/auth.models';
 
 @Component({
   selector: 'app-main-layout',
@@ -28,6 +31,8 @@ import { FotoService } from '../../core/services/foto.service';
     MatMenuModule,
     MatDividerModule,
     MatTooltipModule,
+    MatFormFieldModule,
+    MatInputModule,
     MatProgressSpinnerModule,
   ],
   templateUrl: './main-layout.html',
@@ -43,7 +48,15 @@ export class MainLayoutComponent {
   readonly userFoto = signal<string | null>(null);
   readonly showModalFoto = signal(false);
   readonly uploading = signal(false);
+  readonly saving = signal(false);
+  readonly showSenhaFields = signal(false);
   private pendingAction: string | null = null;
+
+  // Form signals
+  readonly formNome = signal('');
+  readonly formTelefone = signal('');
+  readonly formSenhaAtual = signal('');
+  readonly formNovaSenha = signal('');
 
   readonly navItems = [
     { path: '/dashboard', label: 'Dashboard', icon: 'dashboard' },
@@ -56,13 +69,27 @@ export class MainLayoutComponent {
       next: (result) => this.isMobile.set(result.matches),
     });
 
-    this.fotoService.getFoto().subscribe({
+    this.carregarPerfil();
+  }
+
+  get userEmail(): string {
+    return this.auth.user()?.email ?? '';
+  }
+
+  private carregarPerfil(): void {
+    this.fotoService.getPerfil().subscribe({
       next: (res) => {
+        this.formNome.set(res.nome);
+        this.formTelefone.set(res.telefone || '');
         if (res.fotoUrl) this.userFoto.set(res.fotoUrl);
       },
       error: () => {
-        const fotoFromUser = this.auth.user()?.fotoUrl;
-        if (fotoFromUser) this.userFoto.set(fotoFromUser);
+        const user = this.auth.user();
+        if (user) {
+          this.formNome.set(user.nome);
+          this.formTelefone.set(user.telefone || '');
+          if (user.fotoUrl) this.userFoto.set(user.fotoUrl);
+        }
       },
     });
   }
@@ -91,14 +118,10 @@ export class MainLayoutComponent {
     this.auth.logout();
   }
 
-  // Marca a ação pendente — o menu fecha e disporta onMenuClosed()
   abrirModalFoto(): void {
-    setTimeout(() => {
-      this.showModalFoto.set(true);
-    }, 100);
+    this.pendingAction = 'abrirModal';
   }
 
-  // Executado pelo evento (closed) do mat-menu
   onMenuClosed(): void {
     if (this.pendingAction === 'abrirModal') {
       this.showModalFoto.set(true);
@@ -108,6 +131,17 @@ export class MainLayoutComponent {
 
   fecharModalFoto(): void {
     this.showModalFoto.set(false);
+    this.showSenhaFields.set(false);
+    this.formSenhaAtual.set('');
+    this.formNovaSenha.set('');
+  }
+
+  toggleSenhaFields(): void {
+    this.showSenhaFields.update((v) => !v);
+    if (!this.showSenhaFields()) {
+      this.formSenhaAtual.set('');
+      this.formNovaSenha.set('');
+    }
   }
 
   onFotoSelecionada(event: Event): void {
@@ -132,6 +166,35 @@ export class MainLayoutComponent {
     this.fotoService.removerFoto().subscribe({
       next: () => this.userFoto.set(null),
       error: (err) => console.error('Erro ao remover foto:', err),
+    });
+  }
+
+  salvarPerfil(): void {
+    this.saving.set(true);
+
+    const dados: PerfilUpdate = {
+      nomeCompleto: this.formNome(),
+      telefone: this.formTelefone(),
+    };
+
+    if (this.showSenhaFields() && this.formSenhaAtual() && this.formNovaSenha()) {
+      dados.senhaAtual = this.formSenhaAtual();
+      dados.novaSenha = this.formNovaSenha();
+    }
+
+    this.fotoService.atualizarPerfil(dados).subscribe({
+      next: (res) => {
+        this.saving.set(false);
+        this.showSenhaFields.set(false);
+        this.formSenhaAtual.set('');
+        this.formNovaSenha.set('');
+        // Atualiza o nome exibido no header
+        // TODO: atualizar o AuthService.user() se necessário
+      },
+      error: (err) => {
+        console.error('Erro ao salvar perfil:', err);
+        this.saving.set(false);
+      },
     });
   }
 }

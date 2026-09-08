@@ -29,13 +29,13 @@
     </div>
   </button>
 
-  <mat-menu #userMenu="matMenu" class="user-menu-panel" xPosition="before">
-    <button mat-menu-item (click)="abrirModalFoto()" class="user-info-menu-btn">
-      <span>
-        <span class="user-name">{{ userNome }}</span>
-        <span class="user-role">{{ userRole }}</span>
-        <span class="user-edit-hint">Clique para alterar foto</span>
-      </span>
+  <mat-menu #userMenu="matMenu" class="user-menu-panel" xPosition="before" (closed)="onMenuClosed()">
+    <button mat-menu-item (click)="abrirModalFoto()">
+    <span>
+      <span class="user-name">{{ userNome }}</span>
+      <span class="user-role">{{ userRole }}</span>
+      <span class="user-edit-hint">Clique para editar perfil</span>
+    </span>
     </button>
     <mat-divider></mat-divider>
     <button mat-menu-item (click)="toggleTheme()">
@@ -89,41 +89,104 @@
 
 <!-- MODAL FORA DO MAT-SIDENAV-CONTAINER -->
 @if (showModalFoto()) {
-  <div class="foto-modal-overlay" (click)="fecharModalFoto()">
-    <div class="foto-modal" (click)="$event.stopPropagation()">
-      <h3 class="foto-modal-title">Alterar foto de perfil</h3>
+  <div class="perfil-modal-overlay" (click)="fecharModalFoto()">
+    <div class="perfil-modal" (click)="$event.stopPropagation()">
 
-      <div class="foto-modal-preview">
-        @if (uploading()) {
-          <mat-spinner diameter="40"></mat-spinner>
-        } @else if (userFoto()) {
-          <img [src]="userFoto()" alt="Preview" class="foto-preview-img" />
-        } @else {
-          <div class="foto-preview-placeholder">
-            <mat-icon>person</mat-icon>
-            <span>{{ iniciais }}</span>
+      <!-- Header do modal -->
+      <div class="perfil-modal-header">
+        <h3 class="perfil-modal-title">Editar Perfil</h3>
+        <button mat-icon-button (click)="fecharModalFoto()" class="perfil-modal-close">
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+
+      <!-- Avatar centralizado -->
+      <div class="perfil-avatar-section">
+        <div class="perfil-avatar-wrapper">
+          @if (uploading()) {
+            <mat-spinner diameter="48"></mat-spinner>
+          } @else if (userFoto()) {
+            <img [src]="userFoto()" alt="Foto" class="perfil-avatar-img" />
+          } @else {
+            <div class="perfil-avatar-placeholder">
+              {{ iniciais }}
+            </div>
+          }
+        </div>
+        @if (!uploading()) {
+          <label class="perfil-upload-label">
+            <input type="file" accept="image/*" (change)="onFotoSelecionada($event)" hidden />
+            <mat-icon>photo_camera</mat-icon>
+            <span>Alterar foto</span>
+          </label>
+          @if (userFoto()) {
+            <button mat-button (click)="removerFoto()" class="perfil-remove-link">
+              Remover foto
+            </button>
+          }
+        }
+      </div>
+
+      <mat-divider></mat-divider>
+
+      <!-- Campos de formulário -->
+      <div class="perfil-form-section">
+        <mat-form-field appearance="outline" class="perfil-field-full">
+          <mat-label>Nome completo</mat-label>
+          <input matInput [value]="formNome()" (input)="formNome.set($any($event.target).value)" />
+        </mat-form-field>
+
+        <div class="perfil-field-row">
+          <mat-form-field appearance="outline" class="perfil-field-half">
+            <mat-label>Telefone</mat-label>
+            <input matInput [value]="formTelefone()" (input)="formTelefone.set($any($event.target).value)" placeholder="(00) 00000-0000" />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="perfil-field-half">
+            <mat-label>E-mail</mat-label>
+            <input matInput [value]="userEmail" disabled />
+          </mat-form-field>
+        </div>
+      </div>
+
+      <!-- Alterar senha -->
+      <div class="perfil-senha-section">
+        <button mat-stroked-button (click)="toggleSenhaFields()" class="perfil-senha-toggle" type="button">
+          <mat-icon>{{ showSenhaFields() ? 'expand_less' : 'lock_outline' }}</mat-icon>
+          {{ showSenhaFields() ? 'Cancelar alteração de senha' : 'Alterar senha' }}
+        </button>
+
+        @if (showSenhaFields()) {
+          <div class="perfil-field-row">
+            <mat-form-field appearance="outline" class="perfil-field-half">
+              <mat-label>Senha atual</mat-label>
+              <input matInput type="password" [value]="formSenhaAtual()" (input)="formSenhaAtual.set($any($event.target).value)" />
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="perfil-field-half">
+              <mat-label>Nova senha</mat-label>
+              <input matInput type="password" [value]="formNovaSenha()" (input)="formNovaSenha.set($any($event.target).value)" />
+              <mat-hint>Mínimo de 6 caracteres</mat-hint>
+            </mat-form-field>
           </div>
         }
       </div>
 
-      @if (!uploading()) {
-        <label class="foto-upload-btn">
-          <input type="file" accept="image/*" (change)="onFotoSelecionada($event)" hidden />
-          <mat-icon>upload</mat-icon>
-          <span>Escolher imagem</span>
-        </label>
-
-        @if (userFoto()) {
-          <button mat-stroked-button class="foto-remove-btn" (click)="removerFoto()">
-            <mat-icon>delete</mat-icon>
-            Remover foto
+      <!-- Actions -->
+      <div class="perfil-modal-actions">
+        @if (saving()) {
+          <mat-spinner diameter="28"></mat-spinner>
+        } @else {
+          <button mat-raised-button color="primary" (click)="salvarPerfil()" class="perfil-save-btn">
+            <mat-icon>save</mat-icon>
+            Salvar alterações
           </button>
         }
-      }
+        <button mat-stroked-button (click)="fecharModalFoto()" class="perfil-cancel-btn">
+          Cancelar
+        </button>
+      </div>
 
-      <button mat-raised-button class="foto-close-btn" (click)="fecharModalFoto()">
-        Concluir
-      </button>
     </div>
   </div>
 }

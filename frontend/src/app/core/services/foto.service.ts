@@ -1,6 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { PerfilUpdate } from '../auth/auth.models';
 
 @Injectable({ providedIn: 'root' })
 export class FotoService {
@@ -19,5 +20,20 @@ export class FotoService {
 
   getFoto(): Observable<{ fotoUrl: string }> {
     return this.http.get<{ fotoUrl: string }>(`${this.API}/foto`);
+  }
+
+  getPerfil(): Observable<{ nome: string; email: string; telefone: string; fotoUrl: string }> {
+    return this.http.get<{ nome: string; email: string; telefone: string; fotoUrl: string }>(
+      `${this.API}/perfil`,
+    );
+  }
+
+  atualizarPerfil(
+    dados: PerfilUpdate,
+  ): Observable<{ nome: string; telefone: string; message: string }> {
+    return this.http.put<{ nome: string; telefone: string; message: string }>(
+      `${this.API}/perfil`,
+      dados,
+    );
   }
 }

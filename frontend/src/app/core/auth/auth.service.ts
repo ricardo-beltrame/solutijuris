@@ -46,6 +46,7 @@ export class AuthService {
       nome: res.nome,
       email: res.email,
       role: res.perfil,
+      telefone: '', // adiciona esta linha
       fotoUrl: res.fotoUrl ?? null,
     };
 

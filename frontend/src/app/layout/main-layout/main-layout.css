@@ -538,3 +538,249 @@
 .user-menu-panel .user-avatar-large mat-icon {
   color: rgba(255, 255, 255, 0.8);
 }
+
+/* ===================== PERFIL MODAL ===================== */
+.foto-modal {
+  width: 420px;
+  max-width: 90vw;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.perfil-form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.perfil-field {
+  width: 100%;
+}
+
+.senha-toggle {
+  margin: 8px 0;
+}
+
+.senha-toggle button {
+  width: 100%;
+  justify-content: flex-start;
+}
+
+.perfil-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+  margin-top: 16px;
+}
+
+.perfil-save-btn {
+  flex: 1;
+}
+
+.perfil-cancel-btn {
+  flex: 0 0 auto;
+}
+/* ===================== PERFIL MODAL ===================== */
+.perfil-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.perfil-modal {
+  width: 480px;
+  max-width: 92vw;
+  max-height: 90vh;
+  overflow-y: auto;
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  padding: 0;
+  animation: slideUp 0.25s ease;
+}
+
+@keyframes slideUp {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+/* Header */
+.perfil-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 24px 12px;
+}
+
+.perfil-modal-title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--on-surface);
+  margin: 0;
+}
+
+.perfil-modal-close {
+  flex-shrink: 0;
+}
+
+/* Avatar section */
+.perfil-avatar-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 24px 20px;
+}
+
+.perfil-avatar-wrapper {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background: var(--surface-variant);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border: 3px solid var(--border);
+  position: relative;
+}
+
+.perfil-avatar-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.perfil-avatar-placeholder {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--primary);
+  background: var(--surface-variant);
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.perfil-upload-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  color: var(--primary);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  padding: 4px 12px;
+  border-radius: 20px;
+  transition: background 0.2s ease;
+}
+
+.perfil-upload-label:hover {
+  background: var(--surface-variant);
+}
+
+.perfil-upload-label mat-icon {
+  font-size: 1.125rem;
+  width: 1.125rem;
+  height: 1.125rem;
+}
+
+.perfil-remove-link {
+  font-size: 0.75rem;
+  color: var(--danger);
+  min-height: 28px;
+  line-height: 28px;
+}
+
+/* Form section */
+.perfil-form-section {
+  padding: 8px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.perfil-field-full {
+  width: 100%;
+}
+
+.perfil-field-row {
+  display: flex;
+  gap: 12px;
+}
+
+.perfil-field-half {
+  flex: 1;
+  width: 50%;
+}
+
+/* Senha section */
+.perfil-senha-section {
+  padding: 8px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.perfil-senha-toggle {
+  width: 100%;
+  justify-content: flex-start;
+}
+
+/* Actions */
+.perfil-modal-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+  padding: 16px 24px 24px;
+  border-top: 1px solid var(--border);
+}
+
+.perfil-save-btn {
+  min-width: 140px;
+}
+
+.perfil-cancel-btn {
+  min-width: 80px;
+}
+
+/* Responsive */
+@media (max-width: 599px) {
+  .perfil-modal {
+    width: 100vw;
+    max-width: 100vw;
+    border-radius: 0;
+    max-height: 100vh;
+  }
+
+  .perfil-field-row {
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .perfil-field-half {
+    width: 100%;
+  }
+
+  .perfil-modal-actions {
+    flex-direction: column-reverse;
+  }
+
+  .perfil-save-btn,
+  .perfil-cancel-btn {
+    width: 100%;
+  }
+}
