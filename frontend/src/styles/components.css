@@ -315,16 +315,31 @@
   background: rgba(255, 255, 255, 0.14);
 }
 
+/* ===================== USER MENU PANEL ===================== */
 .user-menu-panel .user-name {
-  color: #ffffff;
+  display: block;
+  font-weight: 600;
+  font-size: 0.9375rem;
+  color: var(--on-surface);
+  line-height: 1.4;
 }
 
 .user-menu-panel .user-role {
-  color: rgba(255, 255, 255, 0.6);
+  display: block;
+  font-size: 0.75rem;
+  color: var(--on-surface-variant);
+  text-transform: capitalize;
+  margin-top: 2px;
+  line-height: 1.4;
 }
 
 .user-menu-panel .user-edit-hint {
-  color: var(--accent);
+  display: block;
+  font-size: 0.6875rem;
+  color: var(--primary);
+  margin-top: 6px;
+  font-weight: 500;
+  line-height: 1.4;
 }
 
 .user-menu-panel .user-avatar-large {

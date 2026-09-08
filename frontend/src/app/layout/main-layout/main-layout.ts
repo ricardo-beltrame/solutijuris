@@ -188,6 +188,7 @@ export class MainLayoutComponent {
         this.showSenhaFields.set(false);
         this.formSenhaAtual.set('');
         this.formNovaSenha.set('');
+        this.fecharModalFoto();
         // Atualiza o nome exibido no header
         // TODO: atualizar o AuthService.user() se necessário
       },
@@ -196,5 +197,22 @@ export class MainLayoutComponent {
         this.saving.set(false);
       },
     });
+  }
+  onTelefoneInput(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    let value = input.value.replace(/\D/g, '');
+
+    if (value.length > 11) value = value.substring(0, 11);
+
+    if (value.length <= 2) {
+      value = value.length > 0 ? `(${value}` : '';
+    } else if (value.length <= 7) {
+      value = `(${value.substring(0, 2)}) ${value.substring(2)}`;
+    } else {
+      value = `(${value.substring(0, 2)}) ${value.substring(2, 7)}-${value.substring(7)}`;
+    }
+
+    this.formTelefone.set(value);
+    input.value = value;
   }
 }

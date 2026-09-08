@@ -519,15 +519,29 @@
 }
 
 .user-menu-panel .user-name {
-  color: #ffffff;
+  display: block;
+  font-weight: 600;
+  font-size: 0.9375rem;
+  color: var(--on-surface);
+  line-height: 1.4;
 }
 
 .user-menu-panel .user-role {
-  color: rgba(255, 255, 255, 0.6);
+  display: block;
+  font-size: 0.75rem;
+  color: var(--on-surface-variant);
+  text-transform: capitalize;
+  margin-top: 2px;
+  line-height: 1.4;
 }
 
 .user-menu-panel .user-edit-hint {
-  color: var(--accent);
+  display: block;
+  font-size: 0.6875rem;
+  color: var(--primary);
+  margin-top: 6px;
+  font-weight: 500;
+  line-height: 1.4;
 }
 
 .user-menu-panel .user-avatar-large {
@@ -640,13 +654,13 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 8px;
-  padding: 8px 24px 20px;
+  gap: 10px;
+  padding: 12px 24px 20px;
 }
 
 .perfil-avatar-wrapper {
-  width: 100px;
-  height: 100px;
+  width: 96px;
+  height: 96px;
   border-radius: 50%;
   background: var(--surface-variant);
   display: flex;
@@ -655,19 +669,20 @@
   overflow: hidden;
   border: 3px solid var(--border);
   position: relative;
+  transition: all 0.25s ease;
 }
 
 .perfil-avatar-img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  border-radius: 50%;
 }
 
 .perfil-avatar-placeholder {
-  font-size: 2rem;
+  font-size: 1.75rem;
   font-weight: 700;
   color: var(--primary);
-  background: var(--surface-variant);
   width: 100%;
   height: 100%;
   display: flex;
@@ -683,7 +698,7 @@
   color: var(--primary);
   font-size: 0.8125rem;
   font-weight: 500;
-  padding: 4px 12px;
+  padding: 6px 14px;
   border-radius: 20px;
   transition: background 0.2s ease;
 }
@@ -783,4 +798,263 @@
   .perfil-cancel-btn {
     width: 100%;
   }
+}
+
+/* ===================== PERFIL MODAL — CAMPOS MODERNOS ===================== */
+.perfil-modal .mat-mdc-form-field {
+  --mdc-outlined-text-field-outline-color: var(--border);
+  --mdc-outlined-text-field-focus-outline-color: var(--primary);
+  --mdc-outlined-text-field-hover-outline-color: var(--primary-light);
+}
+
+.perfil-modal .mat-mdc-outlined-text-field {
+  border-radius: 10px;
+}
+
+.perfil-modal .mat-mdc-form-field-infix {
+  padding: 12px 0;
+  min-height: 48px;
+}
+
+.perfil-modal .mat-mdc-form-field .mat-mdc-form-field-input-control {
+  font-size: 0.9375rem;
+  font-weight: 400;
+  color: var(--on-surface);
+}
+
+.perfil-modal .mat-mdc-form-field.mat-focused .mat-mdc-notched-outline {
+  --mdc-outlined-text-field-focus-outline-color: var(--primary);
+  border-width: 2px;
+}
+
+.perfil-modal .mat-mdc-form-field .mat-mdc-notched-outline {
+  border-radius: 10px;
+}
+
+.perfil-modal .mat-mdc-form-field .mat-mdc-notched-outline > div {
+  border-color: var(--border);
+  border-radius: 10px;
+}
+
+.perfil-modal .mat-mdc-form-field .mat-mdc-notched-outline .mat-mdc-notched-outline-leading {
+  border-radius: 10px 0 0 10px;
+}
+
+.perfil-modal .mat-mdc-form-field .mat-mdc-notched-outline .mat-mdc-notched-outline-trailing {
+  border-radius: 0 10px 10px 0;
+}
+
+/* Label flutuante com cor primária ao focar */
+.perfil-modal .mat-mdc-form-field.mat-focused .mat-mdc-floating-label {
+  color: var(--primary);
+}
+
+/* Hint com espaçamento */
+.perfil-modal .mat-mdc-form-field .mat-mdc-form-field-hint {
+  font-size: 0.75rem;
+  color: var(--on-surface-variant);
+}
+
+/* ===================== BOTÃO REMOVER FOTO — TEXTO ===================== */
+.perfil-remove-link {
+  font-size: 0.75rem;
+  color: var(--danger);
+  min-height: 28px;
+  line-height: 28px;
+  text-decoration: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  transition: color 0.2s ease;
+}
+
+.perfil-remove-link:hover {
+  color: var(--danger);
+  text-decoration: underline;
+  filter: brightness(1.1);
+}
+
+/* ===================== BOTÃO ALTERAR SENHA — MODERNO ===================== */
+.perfil-senha-toggle {
+  width: 100%;
+  justify-content: flex-start;
+  border-radius: 10px;
+  border: 1px dashed var(--border);
+  background: var(--surface-variant);
+  color: var(--on-surface-variant);
+  transition: all 0.2s ease;
+}
+
+.perfil-senha-toggle:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+  background: rgba(25, 118, 210, 0.04);
+}
+
+/* ===================== SECTION LABELS ===================== */
+.perfil-section-label {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--on-surface-variant);
+  padding: 0 4px 4px;
+}
+
+/* ===================== AVATAR HOVER EFFECT ===================== */
+.perfil-avatar-wrapper {
+  position: relative;
+  cursor: pointer;
+  transition: box-shadow 0.25s ease;
+}
+
+.perfil-avatar-wrapper:hover {
+  box-shadow: 0 0 0 4px rgba(25, 118, 210, 0.15);
+  border-color: var(--primary) !important;
+}
+
+.perfil-avatar-wrapper::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.35);
+  opacity: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.2s ease;
+}
+
+.perfil-avatar-wrapper:hover::after {
+  opacity: 1;
+}
+
+/* Ícone de câmera sobreposto no hover */
+.perfil-avatar-overlay-icon {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #fff;
+  font-size: 1.75rem;
+  width: 1.75rem;
+  height: 1.75rem;
+  opacity: 0;
+  z-index: 2;
+  transition: opacity 0.2s ease;
+  pointer-events: none;
+}
+
+.perfil-avatar-wrapper:hover .perfil-avatar-overlay-icon {
+  opacity: 1;
+}
+
+/* ===================== CAMPOS MODERNOS ===================== */
+.perfil-field-phone {
+  flex: 0 0 38%;
+  width: 38%;
+}
+
+.perfil-field-email {
+  flex: 1;
+  width: 62%;
+}
+
+.perfil-field-half {
+  flex: 1;
+  width: 50%;
+}
+
+/* Ícone prefix alinhado */
+.perfil-field-icon {
+  margin-right: 3px;
+  color: var(--on-surface-variant);
+  font-size: 1.125rem;
+  width: 1.125rem;
+  height: 1.125rem;
+  opacity: 0.6;
+  transition: color 0.2s ease, opacity 0.2s ease;
+}
+
+.perfil-modal .mat-mdc-form-field.mat-focused .perfil-field-icon {
+  color: var(--primary);
+  opacity: 1;
+}
+
+/* Outline arredondado e moderno */
+.perfil-modal .mat-mdc-outlined-text-field .mdc-notched-outline {
+  border-radius: 10px;
+}
+
+.perfil-modal .mat-mdc-outlined-text-field .mdc-notched-outline__leading {
+  border-radius: 10px 0 0 10px;
+  border-width: 1px;
+}
+
+.perfil-modal .mat-mdc-outlined-text-field .mdc-notched-outline__trailing {
+  border-radius: 0 10px 10px 0;
+  border-width: 1px;
+}
+
+.perfil-modal .mat-mdc-outlined-text-field .mdc-notched-outline__notch {
+  border-width: 1px;
+}
+
+/* Cor da borda — padrão */
+.perfil-modal .mat-mdc-outlined-text-field .mdc-notched-outline > * {
+  border-color: var(--border);
+}
+
+/* Hover */
+.perfil-modal .mat-mdc-outlined-text-field:hover .mdc-notched-outline > * {
+  border-color: var(--primary-light);
+}
+
+/* Foco — borda mais espessa e cor primária */
+.perfil-modal .mat-mdc-outlined-text-field.mat-focused .mdc-notched-outline > * {
+  border-color: var(--primary);
+  border-width: 2px;
+}
+
+/* Label flutuante ao focar */
+.perfil-modal .mat-mdc-form-field.mat-focused .mat-mdc-floating-label {
+  color: var(--primary);
+}
+
+/* Texto dentro do campo */
+.perfil-modal .mat-mdc-form-field-input-control {
+  font-size: 0.9375rem;
+  font-weight: 400;
+  color: var(--on-surface);
+}
+
+/* Padding interno do input */
+.perfil-modal .mat-mdc-form-field-infix {
+  padding: 10px 0;
+  min-height: 44px;
+}
+
+/* Campo disabled (email) com visual suave */
+.perfil-modal .mat-mdc-outlined-text-field .mat-mdc-form-field-input-control:disabled {
+  color: var(--on-surface-variant);
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.perfil-modal .mat-mdc-outlined-text-field .mdc-notched-outline > *:has(.mat-mdc-form-field-input-control:disabled) {
+  border-style: dashed;
+}
+
+/* Placeholder mais discreto */
+.perfil-modal .mat-mdc-form-field .mat-mdc-form-field-input-control::placeholder {
+  color: var(--on-surface-variant);
+  opacity: 0.5;
+}
+
+/* Hint alinhado */
+.perfil-modal .mat-mdc-form-field .mat-mdc-form-field-hint {
+  font-size: 0.75rem;
+  color: var(--on-surface-variant);
 }

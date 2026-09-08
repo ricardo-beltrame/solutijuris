@@ -100,27 +100,22 @@
         </button>
       </div>
 
-      <!-- Avatar centralizado -->
+      <!-- Avatar centralizado com overlay -->
       <div class="perfil-avatar-section">
-        <div class="perfil-avatar-wrapper">
+        <label class="perfil-avatar-wrapper" style="cursor: pointer;">
           @if (uploading()) {
             <mat-spinner diameter="48"></mat-spinner>
           } @else if (userFoto()) {
             <img [src]="userFoto()" alt="Foto" class="perfil-avatar-img" />
           } @else {
-            <div class="perfil-avatar-placeholder">
-              {{ iniciais }}
-            </div>
+            <div class="perfil-avatar-placeholder">{{ iniciais }}</div>
           }
-        </div>
+          <mat-icon class="perfil-avatar-overlay-icon">photo_camera</mat-icon>
+          <input type="file" accept="image/*" (change)="onFotoSelecionada($event)" hidden />
+        </label>
         @if (!uploading()) {
-          <label class="perfil-upload-label">
-            <input type="file" accept="image/*" (change)="onFotoSelecionada($event)" hidden />
-            <mat-icon>photo_camera</mat-icon>
-            <span>Alterar foto</span>
-          </label>
           @if (userFoto()) {
-            <button mat-button (click)="removerFoto()" class="perfil-remove-link">
+            <button class="perfil-remove-link" (click)="removerFoto(); $event.preventDefault()">
               Remover foto
             </button>
           }
@@ -131,26 +126,32 @@
 
       <!-- Campos de formulário -->
       <div class="perfil-form-section">
+        <div class="perfil-section-label">Dados pessoais</div>
+
         <mat-form-field appearance="outline" class="perfil-field-full">
           <mat-label>Nome completo</mat-label>
           <input matInput [value]="formNome()" (input)="formNome.set($any($event.target).value)" />
         </mat-form-field>
 
         <div class="perfil-field-row">
-          <mat-form-field appearance="outline" class="perfil-field-half">
+          <mat-form-field appearance="outline" class="perfil-field-phone">
             <mat-label>Telefone</mat-label>
-            <input matInput [value]="formTelefone()" (input)="formTelefone.set($any($event.target).value)" placeholder="(00) 00000-0000" />
+            <input matInput [value]="formTelefone()" (input)="onTelefoneInput($event)" placeholder="(00) 00000-0000" />
+            <mat-icon matPrefix class="perfil-field-icon">phone</mat-icon>
           </mat-form-field>
 
-          <mat-form-field appearance="outline" class="perfil-field-half">
+          <mat-form-field appearance="outline" class="perfil-field-email perfil-field-disabled">
             <mat-label>E-mail</mat-label>
             <input matInput [value]="userEmail" disabled />
+            <mat-icon matPrefix class="perfil-field-icon">email</mat-icon>
+            <mat-hint>E-mail não pode ser alterado</mat-hint>
           </mat-form-field>
         </div>
       </div>
 
       <!-- Alterar senha -->
       <div class="perfil-senha-section">
+        <div class="perfil-section-label">Segurança</div>
         <button mat-stroked-button (click)="toggleSenhaFields()" class="perfil-senha-toggle" type="button">
           <mat-icon>{{ showSenhaFields() ? 'expand_less' : 'lock_outline' }}</mat-icon>
           {{ showSenhaFields() ? 'Cancelar alteração de senha' : 'Alterar senha' }}
@@ -161,11 +162,13 @@
             <mat-form-field appearance="outline" class="perfil-field-half">
               <mat-label>Senha atual</mat-label>
               <input matInput type="password" [value]="formSenhaAtual()" (input)="formSenhaAtual.set($any($event.target).value)" />
+              <mat-icon matPrefix style="margin-right: 8px; color: var(--on-surface-variant); font-size: 1.125rem;">lock</mat-icon>
             </mat-form-field>
 
             <mat-form-field appearance="outline" class="perfil-field-half">
               <mat-label>Nova senha</mat-label>
               <input matInput type="password" [value]="formNovaSenha()" (input)="formNovaSenha.set($any($event.target).value)" />
+              <mat-icon matPrefix style="margin-right: 8px; color: var(--on-surface-variant); font-size: 1.125rem;">lock_open</mat-icon>
               <mat-hint>Mínimo de 6 caracteres</mat-hint>
             </mat-form-field>
           </div>
